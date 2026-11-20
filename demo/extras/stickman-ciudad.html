@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stickman superhéroe en la ciudad</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light dark;
+  --page:#EEF0F5; --text:#1A1F3A; --muted:#55597A;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --page:#0E0B1F; --text:#F4F1FA; --muted:#A7A2C8; }
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;background:var(--page);color:var(--text);font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.5}
+main{max-width:960px;margin:0 auto;padding:20px 14px 40px}
+h1{font-size:clamp(1.4rem,4.5vw,2rem);font-weight:800;margin:0 0 4px}
+p{margin:0 0 14px;color:var(--muted)}
+.stage{border-radius:12px;overflow:hidden;background:#2B1B54}
+canvas{display:block;width:100%;cursor:pointer;touch-action:manipulation}
+</style>
+</head>
+<body>
+<main>
+  <h1>Stickman, superhéroe de la ciudad</h1>
+  <p>Toca o haz clic en la escena para que haga un giro aéreo.</p>
+  <div class="stage"><canvas id="c" role="img" aria-label="Un hombre de palitos con capa roja vuela sobre una ciudad al atardecer"></canvas></div>
+</main>
+<script>
+(function(){
+  var cv=document.getElementById('c'), ctx=cv.getContext('2d');
+  var W,H,dpr,start=performance.now(), boost=-10;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+  function ss(x){x=clamp(x,0,1);return x*x*(3-2*x)}
+  function size(){dpr=Math.min(window.devicePixelRatio||1,2);W=cv.parentElement.clientWidth;H=Math.round(W*9/16);cv.width=W*dpr;cv.height=H*dpr;cv.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}
+
+  // ciudad: 3 capas con edificios generados una sola vez
+  var layers=[
+    {sp:18, col:'#5B4690', hMin:.22,hMax:.5,  wMin:50,wMax:100, win:false, seed:3},
+    {sp:55, col:'#33296A', hMin:.18,hMax:.46, wMin:60,wMax:120, win:true,  seed:5},
+    {sp:130,col:'#17133A', hMin:.12,hMax:.38, wMin:70,wMax:140, win:true,  seed:9}
+  ];
+  layers.forEach(function(L){
+    var r=rng(L.seed),x=0;L.b=[];
+    while(x<1800){var w=L.wMin+r()*(L.wMax-L.wMin);L.b.push({x:x,w:w,h:L.hMin+r()*(L.hMax-L.hMin),s:r()*1000,roof:r()<.3});x+=w+r()*8}
+    L.len=x;
+  });
+  var clouds=[],stars=[],lines=[],i,r0=rng(21);
+  for(i=0;i<8;i++)clouds.push({x:r0(),y:.08+r0()*.3,s:.6+r0()*.9,v:4+r0()*8});
+  for(i=0;i<70;i++)stars.push({x:r0(),y:r0()*.4,r:.5+r0()*1,p:r0()*6});
+  for(i=0;i<16;i++)lines.push({x:r0(),y:.15+r0()*.6,l:60+r0()*120,v:.7+r0()*.9});
+
+  function drawCity(t,spd,k){
+    layers.forEach(function(L,li){
+      var off=(spd*L.sp*k)%L.len;
+      for(var rep=-1;rep<=1;rep++){
+        L.b.forEach(function(b){
+          var x=b.x-off+rep*L.len; if(x>W+160||x+b.w<-10)return;
+          var bh=b.h*H, y=H-bh;
+          ctx.fillStyle=L.col; ctx.fillRect(x,y,b.w,bh+2);
+          if(b.roof){ctx.fillRect(x+b.w*.45,y-14*k,3*k,14*k)}
+          if(L.win){
+            var cw=9*k,ch=11*k,gx=16*k,gy=20*k, rr=rng(b.s|0);
+            for(var wy=y+10*k;wy<H-10*k;wy+=gy)for(var wx=x+8*k;wx<x+b.w-cw-4;wx+=gx){
+              var on=rr()<.42, fl=rr()<.04&&Math.sin(t*3+wx)>.6;
+              if(on&&!fl){ctx.fillStyle=li===1?'rgba(255,210,122,.55)':'rgba(255,210,122,.9)';ctx.fillRect(wx,wy,cw,ch)}
+            }
+          }
+        });
+      }
+    });
+  }
+
+  function hero(t,hx,hy,flip,k){
+    ctx.save(); ctx.translate(hx,hy); ctx.rotate(-.18-flip*6.283); ctx.scale(k,k);
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    // capa
+    var N=14,top=[],bot=[];
+    for(var n=0;n<=N;n++){var u=n/N;
+      var wv=Math.sin(t*9-u*5.5)*13*u, x=16-u*(100+flip*0);
+      top.push([x,-3+wv+u*5]); bot.push([x,5+wv+u*22+14*(1-u)*.4]);
+    }
+    ctx.beginPath(); ctx.moveTo(top[0][0],top[0][1]);
+    top.forEach(function(p){ctx.lineTo(p[0],p[1])});
+    for(n=N;n>=0;n--)ctx.lineTo(bot[n][0],bot[n][1]);
+    ctx.closePath(); ctx.fillStyle='#E8344E'; ctx.fill();
+    ctx.strokeStyle='#8E1630'; ctx.lineWidth=2; ctx.stroke();
+    // cuerpo de palitos
+    ctx.strokeStyle='#0F0C26'; ctx.lineWidth=6;
+    var lw=Math.sin(t*10)*4;
+    ctx.beginPath(); ctx.moveTo(18,0); ctx.lineTo(-24,3); ctx.stroke();                         // torso
+    ctx.beginPath(); ctx.moveTo(14,0); ctx.lineTo(48,-6); ctx.stroke();                         // brazo adelante
+    ctx.beginPath(); ctx.moveTo(10,2); ctx.lineTo(30,13); ctx.stroke();                         // otro brazo
+    ctx.beginPath(); ctx.moveTo(-24,3); ctx.lineTo(-54,-3+lw); ctx.stroke();                    // pierna
+    ctx.beginPath(); ctx.moveTo(-24,3); ctx.lineTo(-52,12-lw); ctx.stroke();                    // pierna
+    // cinturón y emblema
+    ctx.strokeStyle='#FFC53D'; ctx.lineWidth=4; ctx.beginPath(); ctx.moveTo(-20,-1); ctx.lineTo(-20,8); ctx.stroke();
+    ctx.fillStyle='#FFC53D'; ctx.beginPath();
+    for(var s=0;s<10;s++){var a=-1.57+s*.628,rad=s%2?3.2:7;ctx.lineTo(2+Math.cos(a)*rad,3+Math.sin(a)*rad)}
+    ctx.closePath(); ctx.fill();
+    // cabeza y antifaz
+    ctx.fillStyle='#F4F1FA'; ctx.strokeStyle='#0F0C26'; ctx.lineWidth=5;
+    ctx.beginPath(); ctx.arc(32,-10,12,0,6.283); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#E8344E'; ctx.fillRect(28,-16,15,6);
+    ctx.fillStyle='#F4F1FA'; ctx.fillRect(36,-14.5,3,3);
+    ctx.restore();
+  }
+
+  function frame(now){
+    var t=reduce?4:(now-start)/1000, k=W/960;
+    var f=clamp((t-boost)/1,0,1), flip=ss(f), spd=t+flip*0, bump=Math.sin(f*Math.PI)*1.4;
+    // cielo
+    var g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#2B1B54'); g.addColorStop(.55,'#C2507F'); g.addColorStop(.85,'#FF9E6B'); g.addColorStop(1,'#FFC27A');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    stars.forEach(function(s){ctx.fillStyle='rgba(255,255,255,'+(.35+.35*Math.sin(t*1.5+s.p))*(1-s.y*2)+')';ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r*k+.3,0,6.283);ctx.fill()});
+    // sol
+    var sg=ctx.createRadialGradient(W*.78,H*.62,0,W*.78,H*.62,H*.5);
+    sg.addColorStop(0,'rgba(255,240,200,1)'); sg.addColorStop(.12,'rgba(255,214,150,.95)'); sg.addColorStop(.13,'rgba(255,190,120,.5)'); sg.addColorStop(1,'rgba(255,170,110,0)');
+    ctx.fillStyle=sg; ctx.fillRect(0,0,W,H);
+    // nubes
+    clouds.forEach(function(c){var x=((c.x*W-t*c.v*k)%(W+300)+W+300)%(W+300)-150,y=c.y*H;
+      ctx.fillStyle='rgba(255,200,190,.28)';
+      for(var q=0;q<4;q++){ctx.beginPath();ctx.ellipse(x+q*34*c.s*k,y+(q%2)*5*k,60*c.s*k,15*c.s*k,0,0,6.283);ctx.fill()}});
+    // ciudad
+    drawCity(t+bump*2,1,k);
+    // líneas de velocidad
+    ctx.strokeStyle='rgba(255,255,255,.35)'; ctx.lineWidth=2*k;
+    lines.forEach(function(l){var x=W-((t*l.v*.9+l.x)%1.2)*W*1.2+W*.1,y=l.y*H;
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+l.l*k*(1+bump),y);ctx.stroke()});
+    // héroe
+    var hy=H*.36+Math.sin(t*1.7)*10*k-bump*10*k;
+    hero(t,W*.38,hy,flip,k*1.25);
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  size();
+  window.addEventListener('resize',function(){size();if(reduce)requestAnimationFrame(frame)});
+  cv.addEventListener('pointerdown',function(){boost=(performance.now()-start)/1000});
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

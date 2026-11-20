@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Una carta que se escribe sola. Ábrela con sonido.">
+<meta property="og:title" content="Una carta para ti">
+<meta property="og:description" content="Una carta que se escribe sola. Ábrela con sonido.">
+<meta property="og:type" content="website">
+<title>Una carta para ti</title>
+<style>
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#0a0503;overflow:hidden}
+body{font-family:Georgia,'Palatino Linotype',serif;color:#e8cf9a}
+#glow{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse 90% 75% at 50% 94%,rgba(255,178,84,.6),rgba(160,72,20,.28) 42%,rgba(40,15,5,0) 78%)}
+.wrap{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:calc(env(safe-area-inset-top) + 56px) 16px calc(env(safe-area-inset-bottom) + 14px)}
+.paper{width:min(100%,520px);max-height:calc(100% - 250px);overflow-y:auto;padding:28px 26px 22px;border-radius:3px;color:#2b1a0d;scrollbar-width:none;
+background:radial-gradient(circle at 12% 8%,rgba(150,100,40,.18),transparent 45%),radial-gradient(circle at 90% 95%,rgba(150,100,40,.25),transparent 50%),linear-gradient(170deg,#f1e2bf,#e5d0a2);
+box-shadow:0 0 60px rgba(255,160,60,.25),inset 0 0 40px rgba(120,70,20,.35);opacity:0;transform:translateY(18px);transition:opacity 2s,transform 2s}
+.paper::-webkit-scrollbar{display:none}
+.paper.show{opacity:1;transform:none}
+.paper.dim{opacity:.08}
+.paper p{font-family:'Segoe Script','Lucida Handwriting','Bradley Hand','Brush Script MT',cursive;font-size:clamp(.98rem,4.2vw,1.12rem);line-height:1.85}
+.paper p+p{margin-top:.8em}
+.paper .sig{text-align:right}
+.paper .aviso{font-family:Georgia,serif;font-size:.7rem;font-style:italic;opacity:.45;text-align:center;margin-top:1.6em;line-height:1.3}
+.w{display:inline-block;white-space:nowrap}
+.c{opacity:0;filter:blur(2px);transition:opacity .22s,filter .22s}
+.c.on{opacity:1;filter:none}
+.hint{height:22px;margin-bottom:8px;font-style:italic;font-size:.92rem;opacity:0;transition:opacity 1.5s}
+.hint.vis{opacity:.85}
+.candle{position:relative;display:flex;flex-direction:column;align-items:center}
+.candle.blow{cursor:pointer}
+.fl{width:26px;height:50px;transform:scale(0);transform-origin:50% 100%;opacity:0;transition:transform 1.2s cubic-bezier(.2,.9,.3,1.2),opacity .8s}
+.fl.on{transform:scale(1);opacity:1}
+.fl svg{width:100%;height:100%;display:block;overflow:visible;transform-origin:50% 100%;filter:drop-shadow(0 0 10px rgba(255,170,60,.9))}
+.wick{width:3px;height:11px;border-radius:2px;background:#1b0f08}
+.wax{position:relative;width:60px;height:104px;border-radius:8px 8px 4px 4px;box-shadow:inset 0 8px 10px -4px rgba(255,255,255,.4),0 6px 12px rgba(0,0,0,.6);
+background:linear-gradient(90deg,#b99b6a,#f0dcae 35%,#fff0c8 50%,#e3c88f 75%,#a98a5c)}
+.wax::before{content:"";position:absolute;left:8px;top:-1px;width:9px;height:30px;border-radius:0 0 6px 6px;background:#f5e5bd}
+.puff{position:absolute;left:50%;top:34px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:rgba(210,200,190,.4);filter:blur(5px);pointer-events:none;animation:sube 2.6s ease-out forwards}
+@keyframes sube{to{transform:translate(var(--dx),-130px) scale(4.5);opacity:0}}
+#intro{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding-bottom:210px;text-align:center;cursor:pointer;transition:opacity 1.2s}
+#intro b{font-weight:normal;font-style:italic;font-size:clamp(1.3rem,6vw,1.8rem);animation:pulso 2.6s ease-in-out infinite}
+#intro small{opacity:.55;font-size:.85rem}
+#intro.off{opacity:0;pointer-events:none}
+@keyframes pulso{50%{opacity:.35}}
+.btn,.btn2{background:rgba(30,15,6,.7);color:#e8cf9a;border:1px solid rgba(232,207,154,.35);border-radius:18px;padding:.45em 1em;font:inherit;font-size:.82rem;cursor:pointer}
+.btn{position:fixed;top:calc(env(safe-area-inset-top) + 12px);z-index:5;opacity:0;pointer-events:none;transition:opacity .8s}
+.btn.vis{opacity:1;pointer-events:auto}
+#mute{right:14px}#skip{left:14px}
+.btn:focus-visible,.btn2:focus-visible{outline:2px solid #e8cf9a}
+#wish{position:fixed;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2em;padding-bottom:200px;opacity:0;pointer-events:none;transition:opacity 2s 1s}
+#wish.vis{opacity:1;pointer-events:auto}
+#wish p{font-family:'Segoe Script','Lucida Handwriting','Bradley Hand',cursive;font-size:clamp(1.5rem,7vw,2.2rem);color:#f2d49a;text-shadow:0 0 18px rgba(255,120,40,.6);text-align:center;padding:0 20px}
+
+/* ---- MODO MUESTRA (quitar en la carta final) ---- */
+.marca{position:fixed;top:auto;bottom:calc(env(safe-area-inset-bottom) + 16px);left:14px;z-index:6;font:600 .6rem/1 Georgia,serif;letter-spacing:.22em;color:#e8cf9a;opacity:.55;border:1px solid rgba(232,207,154,.35);border-radius:999px;padding:.4em .9em;pointer-events:none;background:rgba(10,5,3,.35)}
+.pedir{top:auto;bottom:calc(env(safe-area-inset-bottom) + 14px);right:14px;background:linear-gradient(180deg,#f7dfa6,#d9ab5e);color:#2b1a0d;border:0;font-weight:700;box-shadow:0 8px 22px rgba(0,0,0,.5)}
+.pedir2{display:inline-block;text-decoration:none;background:linear-gradient(180deg,#f7dfa6,#d9ab5e);color:#2b1a0d;border:0;font-weight:700;margin-top:.4em}
+#wish .nota{font-family:Georgia,serif;font-style:italic;font-size:.8rem;opacity:.6;max-width:22em;line-height:1.5}
+
+/* ---- Paleta de esta plantilla ---- */
+.paper{background:
+  radial-gradient(circle at 12% 8%,rgba(150,100,40,.18),transparent 45%),
+  radial-gradient(circle at 90% 95%,rgba(150,100,40,.25),transparent 50%),
+  linear-gradient(170deg,#f1e2bf,#e5d0a2);
+  color:#2b1a0d;
+  box-shadow:0 0 60px rgba(255,160,60,.22),inset 0 0 40px rgba(150,100,40,.35)}
+.wax{background:linear-gradient(90deg,#b99b6a,#f0dcae 35%,#fff0c8 50%,#e3c88f 75%,#a98a5c)}
+.wax::before{background:#fff0c8}
+</style>
+</head>
+<body>
+<div id="glow"></div>
+<div class="marca">MUESTRA</div>
+<button id="skip" class="btn" type="button">Saltar</button>
+<button id="mute" class="btn" type="button">Sonido: encendido</button>
+<a id="pedir" class="btn pedir" href="#" target="_blank" rel="noopener">Quiero una así</a>
+<div class="wrap">
+  <article id="paper" class="paper"></article>
+  <div id="hint" class="hint">Toca la vela para soplarla…</div>
+  <div id="candle" class="candle">
+    <div id="fl" class="fl"><svg viewBox="0 0 24 50" preserveAspectRatio="none" aria-hidden="true"><defs><radialGradient id="g" cx="50%" cy="75%" r="60%"><stop offset="0" stop-color="#fffbe0"/><stop offset=".35" stop-color="#ffd36b"/><stop offset=".7" stop-color="#ff8f26"/><stop offset="1" stop-color="#ff5a14" stop-opacity="0"/></radialGradient></defs><path fill="url(#g)" d="M12 0C13 16 24 24 24 38a12 12 0 0 1-24 0C0 24 11 16 12 0Z"/></svg></div>
+    <div class="wick"></div>
+    <div id="wax" class="wax"></div>
+  </div>
+</div>
+<div id="intro"><b>Toca para encender la vela</b><small>Con el sonido activado</small></div>
+<div id="wish"><p id="deseo"></p><button id="relight" class="btn2" type="button">Volver a encender</button>
+  <a id="pedir2" class="btn2 pedir2" href="#" target="_blank" rel="noopener">Quiero una carta así</a>
+  <span class="nota">La tuya lleva su nombre, su historia y su fecha. Se entrega en 24 h.</span></div>
+<script>
+/* Plantilla de muestra · personalizable. Texto y nombres ficticios. */
+const CARTA = {
+  "saludo": "Para Daniela,",
+  "parrafos": [
+    "Hay noches en las que no puedo dormir y termino pensando en ti, en esa primera vez que te reíste de mi chiste malo en la cafetería y decidí que iba a intentarlo.",
+    "Me gusta cómo ordenas las tazas, cómo cantas mal en el auto y cómo te enojas conmigo por no contestar mensajes. Me gusta, sobre todo, que sigues eligiéndome.",
+    "No te prometo días perfectos. Te prometo estar en los difíciles, hacerte café cuando amanezcas cansada y seguir inventando excusas para verte.",
+    "Si esta vela se apaga, no importa: lo mío contigo no depende de la luz."
+  ],
+  "firma": "Tuyo, siempre. — Mateo",
+  "aviso": "Carta de muestra · la tuya se escribe con su nombre y su historia.",
+  "deseo": "Pide un deseo…"
+};
+
+const $ = id => document.getElementById(id);
+const paper = $('paper'), glow = $('glow'), fl = $('fl'), candle = $('candle'), wax = $('wax'), hint = $('hint'),
+      wish = $('wish'), intro = $('intro'), mute = $('mute'), skip = $('skip'), flsvg = fl.querySelector('svg');
+let lit = false, level = 0, target = 0, flick = 1, done = false, skipping = false, muted = false, ac, master, nb;
+const chars = [];
+$('deseo').textContent = CARTA.deseo;
+
+/* ---- Construcción del texto, letra a letra ---- */
+function par(txt, cls) {
+  const p = document.createElement('p');
+  if (cls) p.className = cls;
+  const words = txt.split(' ');
+  words.forEach((w, wi) => {
+    const s = document.createElement('span'); s.className = 'w';
+    [...w].forEach(ch => { const c = document.createElement('span'); c.className = 'c'; c.textContent = ch; s.appendChild(c); chars.push({ el: c, ch }); });
+    p.appendChild(s);
+    if (wi < words.length - 1) p.appendChild(document.createTextNode(' '));
+  });
+  chars[chars.length - 1].end = true;
+  paper.appendChild(p);
+}
+par(CARTA.saludo);
+CARTA.parrafos.forEach(t => par(t));
+par(CARTA.firma, 'sig');
+if (CARTA.aviso) { const a = document.createElement('p'); a.className = 'aviso'; a.textContent = CARTA.aviso; paper.appendChild(a); }
+
+/* ---- Luz de la vela (parpadeo suave) ---- */
+let nextF = 0;
+(function loop(t) {
+  if (t > nextF) { flick = .88 + Math.random() * .24; nextF = t + 70 + Math.random() * 80; }
+  level += (target - level) * .03;
+  const k = lit ? .86 + .14 * flick : 1;
+  glow.style.opacity = Math.min(1, level * k);
+  paper.style.filter = 'brightness(' + (.12 + .88 * level * (lit ? .94 + .06 * flick : 1)) + ')';
+  wax.style.filter = 'brightness(' + (.3 + .7 * level) + ')';
+  if (lit) flsvg.style.transform = 'scale(' + (.94 + .1 * flick) + ',' + (.9 + .18 * flick) + ') skewX(' + ((flick - 1) * 14) + 'deg)';
+  requestAnimationFrame(loop);
+})(0);
+
+/* ---- Sonidos sintetizados (sin archivos) ---- */
+function burst(type, freq, q, gain, dur, when) {
+  const s = ac.createBufferSource(); s.buffer = nb;
+  const f = ac.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+  const g = ac.createGain(); const t = when || ac.currentTime;
+  g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(gain, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+  s.connect(f); f.connect(g); g.connect(master); s.start(t, Math.random() * .3, dur + .02);
+}
+function scratch(ch) {
+  if (!ac || muted) return;
+  const fin = (ch === '.' || ch === ',' || ch === ';' || ch === '?' || ch === '!');
+  burst('bandpass', 2400 + Math.random() * 2400, .9, fin ? .06 : .045, fin ? .09 : .035 + Math.random() * .03);
+}
+function pop() { if (ac && !muted) { const n = 1 + Math.floor(Math.random() * 3), t = ac.currentTime; for (let i = 0; i < n; i++) burst('lowpass', 900 + Math.random() * 1800, 1, .08, .03, t + i * .05); } }
+function crackle() { if (lit) pop(); setTimeout(crackle, 1500 + Math.random() * 3500); }
+
+/* ---- Escritura con tinta ---- */
+/* Mantiene visible la línea que se está escribiendo (no salta al final) */
+function follow(el) {
+  const box = paper.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  const limit = box.top + paper.clientHeight * .82;
+  if (r.bottom > limit) paper.scrollTop += r.bottom - limit;
+}
+function finish() {
+  if (done) return; done = true;
+  chars.forEach(c => c.el.classList.add('on'));
+  skip.classList.remove('vis');
+  if (skipping) paper.scrollTop = 0;
+  else paper.scrollTop = paper.scrollHeight;
+  setTimeout(() => { hint.classList.add('vis'); candle.classList.add('blow'); }, 1400);
+}
+function write() {
+  let i = 0;
+  (function step() {
+    if (done) return;
+    if (skipping || i >= chars.length) { finish(); return; }
+    const c = chars[i++];
+    c.el.classList.add('on');
+    if (c.ch !== ' ') scratch(c.ch);
+    follow(c.el);
+    let d = 46 + Math.random() * 34;
+    if (',;'.includes(c.ch)) d += 240;
+    if ('.!?:'.includes(c.ch)) d += 480;
+    if (c.end) d += 900;
+    setTimeout(step, d);
+  })();
+}
+
+/* ---- Interacciones ---- */
+function light() { lit = true; target = 1; fl.classList.add('on'); wish.classList.remove('vis'); paper.classList.remove('dim'); }
+intro.onclick = () => {
+  if (!ac) {
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    master = ac.createGain(); master.connect(ac.destination);
+    const L = ac.sampleRate >> 1; nb = ac.createBuffer(1, L, ac.sampleRate);
+    const d = nb.getChannelData(0); for (let i = 0; i < L; i++) d[i] = Math.random() * 2 - 1;
+    crackle();
+  }
+  if (ac.resume) ac.resume();
+  intro.classList.add('off');
+  mute.classList.add('vis');
+  $('pedir').classList.add('vis');
+  setTimeout(() => { light(); pop(); }, 500);
+  setTimeout(() => paper.classList.add('show'), 2600);
+  setTimeout(() => { skip.classList.add('vis'); write(); }, 4200);
+};
+skip.onclick = () => { skipping = true; finish(); };
+mute.onclick = () => {
+  muted = !muted;
+  if (master) master.gain.value = muted ? 0 : 1;
+  mute.textContent = muted ? 'Sonido: apagado' : 'Sonido: encendido';
+};
+function puffs() {
+  for (let k = 0; k < 4; k++) setTimeout(() => {
+    const p = document.createElement('i'); p.className = 'puff';
+    p.style.setProperty('--dx', (Math.random() * 50 - 25) + 'px');
+    candle.appendChild(p); setTimeout(() => p.remove(), 2800);
+  }, k * 260);
+}
+candle.onclick = () => {
+  if (!candle.classList.contains('blow') || !lit) return;
+  lit = false; target = .06;
+  fl.classList.remove('on'); candle.classList.remove('blow'); hint.classList.remove('vis');
+  paper.classList.add('dim'); puffs(); wish.classList.add('vis'); $('pedir').classList.remove('vis');
+};
+$('relight').onclick = () => { light(); candle.classList.add('blow'); hint.classList.add('vis'); pop(); $('pedir').classList.add('vis'); };
+
+/* ============================================================
+   CONTACTO: tu WhatsApp (sin +, sin espacios)
+   ============================================================ */
+const VENDEDOR = {
+  whatsapp: "5351321718",
+  mensaje: "Hola, vi la plantilla Clásica (amor) y quiero una personalizada. Es para:"
+};
+(function () {
+  const url = 'https://wa.me/' + VENDEDOR.whatsapp + '?text=' + encodeURIComponent(VENDEDOR.mensaje);
+  ['pedir', 'pedir2'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (el) el.href = url;
+  });
+})();
+</script>
+</body>
+</html>

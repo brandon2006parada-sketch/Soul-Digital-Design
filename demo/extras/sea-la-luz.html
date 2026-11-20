@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sea la luz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light dark;
+  --page:#EEF0F5; --text:#1A1F3A; --muted:#55597A; --btn:#1A1F3A; --btntext:#F4F6FA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --page:#07080F; --text:#F1EEE6; --muted:#9A9FBF; --btn:#F1EEE6; --btntext:#07080F; }
+}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;background:var(--page);color:var(--text);font-family:"Cormorant Garamond",Georgia,serif;font-size:1.15rem;line-height:1.5}
+main{max-width:960px;margin:0 auto;padding:20px 14px 40px}
+.stage{position:relative;border-radius:12px;overflow:hidden;background:#05060d}
+canvas{display:block;width:100%}
+.verse{position:absolute;left:0;right:0;bottom:7%;text-align:center;color:#FFF4D9;text-shadow:0 2px 18px rgba(0,0,0,.55);opacity:0;transition:opacity 3s ease;padding:0 16px;pointer-events:none}
+.verse.on{opacity:1}
+.verse p{margin:0;font-size:clamp(1.3rem,4.2vw,2.5rem);font-style:italic}
+.verse small{display:block;margin-top:6px;font-size:clamp(.9rem,2.2vw,1.1rem);opacity:.8}
+.bar{display:flex;gap:14px;align-items:center;margin-top:14px;flex-wrap:wrap}
+button{font:inherit;font-weight:500;background:var(--btn);color:var(--btntext);border:0;border-radius:999px;padding:8px 22px;cursor:pointer}
+button:focus-visible{outline:3px solid #FFC53D;outline-offset:2px}
+.bar span{color:var(--muted);font-size:1rem}
+</style>
+</head>
+<body>
+<main>
+  <div class="stage">
+    <canvas id="c" role="img" aria-label="Animación: en la oscuridad aparece una luz que crece, separa las nubes y emite rayos de luz"></canvas>
+    <div class="verse" id="verse"><p>Y dijo Dios: Sea la luz; y fue la luz.</p><small>Génesis 1:3</small></div>
+  </div>
+  <div class="bar">
+    <button id="again" type="button">Ver de nuevo</button>
+    <span>Dura unos 14 segundos y después queda en movimiento suave.</span>
+  </div>
+</main>
+<script>
+(function(){
+  var cv=document.getElementById('c'), ctx=cv.getContext('2d'), verse=document.getElementById('verse');
+  var W,H,dpr,start=performance.now();
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  var R=rng(7);
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+  function ss(x){x=clamp(x,0,1);return x*x*(3-2*x)}
+
+  function size(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    W=cv.parentElement.clientWidth; H=Math.round(W*9/16);
+    cv.width=W*dpr; cv.height=H*dpr; cv.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function sprite(rgb,seed){
+    var r=rng(seed), w=360, h=200, c=document.createElement('canvas'); c.width=w; c.height=h;
+    var g=c.getContext('2d');
+    for(var i=0;i<46;i++){
+      var a=r()*6.283, d=Math.sqrt(r());
+      var x=w/2+Math.cos(a)*d*w*.36, y=h*.56+Math.sin(a)*d*h*.26-(1-d)*h*.12;
+      var rad=22+r()*52*(1-d*.45);
+      var gr=g.createRadialGradient(x,y,0,x,y,rad);
+      gr.addColorStop(0,'rgba('+rgb+',.20)'); gr.addColorStop(.6,'rgba('+rgb+',.08)'); gr.addColorStop(1,'rgba('+rgb+',0)');
+      g.fillStyle=gr; g.beginPath(); g.arc(x,y,rad,0,6.283); g.fill();
+    }
+    return c;
+  }
+  var dark=[sprite('34,42,78',1),sprite('42,50,90',2),sprite('28,36,68',3)];
+  var warm=[sprite('255,222,160',1),sprite('255,222,160',2),sprite('255,222,160',3)];
+
+  var stars=[],clouds=[],rays=[],dust=[],i;
+  for(i=0;i<170;i++)stars.push({x:R(),y:R(),r:.4+R()*1.1,p:R()*6.28,s:.5+R()*1.5});
+  for(i=0;i<26;i++)clouds.push({a:R()*6.283,d:.04+R()*.5,s:.8+R()*1.5,k:.25+R()*.55,v:(R()-.5)*8,t:i%3,front:i>11});
+  for(i=0;i<44;i++)rays.push({a:R()*6.283,w:.012+R()*.05,p:R()*6.28,s:.15+R()*.4,l:.9+R()*.6});
+  for(i=0;i<140;i++)dust.push({x:R(),y:R(),z:.3+R()*.7,p:R()*6.28});
+
+  function frame(now){
+    var t=(now-start)/1000; if(reduce)t=16;
+    var I=ss((t-2.5)/7.5), spark=ss((t-1)/1.6), part=ss((t-5.5)/7.5);
+    var cx=W*.5, cy=H*.42, big=Math.max(W,H);
+    verse.classList.toggle('on',t>6.5);
+
+    // sky
+    var g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'rgb('+(6+I*18|0)+','+(8+I*24|0)+','+(18+I*46|0)+')');
+    g.addColorStop(1,'rgb('+(3+I*10|0)+','+(4+I*12|0)+','+(10+I*26|0)+')');
+    ctx.globalCompositeOperation='source-over'; ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+    // stars
+    for(i=0;i<stars.length;i++){var s=stars[i];
+      var a=(.45+.55*Math.sin(t*s.s+s.p))*(1-I*.85)*.9;
+      if(a<=.01)continue; ctx.fillStyle='rgba(235,240,255,'+a+')';
+      ctx.beginPath(); ctx.arc(s.x*W,s.y*H,s.r,0,6.283); ctx.fill();
+    }
+
+    // wide glow
+    ctx.globalCompositeOperation='lighter';
+    var gr=ctx.createRadialGradient(cx,cy,0,cx,cy,big*(.1+.75*I));
+    gr.addColorStop(0,'rgba(255,236,190,'+(.55*I)+')'); gr.addColorStop(.35,'rgba(255,190,110,'+(.2*I)+')'); gr.addColorStop(1,'rgba(255,170,90,0)');
+    ctx.fillStyle=gr; ctx.fillRect(0,0,W,H);
+
+    // back clouds, then front clouds (dark body + warm rim near the light)
+    ctx.globalCompositeOperation='source-over';
+    for(var layer=0;layer<2;layer++){
+      for(i=0;i<clouds.length;i++){var c=clouds[i]; if(c.front!==(layer===1))continue;
+        var dist=(c.d+part*c.k*1.3)*W, ang=c.a+Math.sin(t*.05+i)*.04;
+        var x=cx+Math.cos(ang)*dist+Math.sin(t*.12+i)*c.v+t*(c.v*.25);
+        var y=cy+Math.sin(ang)*dist*.55;
+        var w=360*c.s*(W/960)*1.4, h=200*c.s*(W/960)*1.4;
+        var near=clamp(1-Math.hypot(x-cx,(y-cy)*1.4)/(W*.55),0,1);
+        ctx.globalAlpha=layer?.95:.8; ctx.drawImage(dark[c.t],x-w/2,y-h/2,w,h);
+        ctx.globalAlpha=clamp(I*near*1.3,0,1)*(layer?.9:.6); ctx.drawImage(warm[c.t],x-w/2,y-h/2,w,h);
+      }
+      ctx.globalAlpha=1;
+      if(layer===0){
+        // god rays between cloud layers
+        ctx.globalCompositeOperation='lighter';
+        for(i=0;i<rays.length;i++){var r=rays[i];
+          var an=r.a+Math.sin(t*r.s*.4+r.p)*.06, len=big*r.l;
+          var al=I*(.05+.09*(.5+.5*Math.sin(t*r.s+r.p)))*(.4+.6*part);
+          var lg=ctx.createLinearGradient(cx,cy,cx+Math.cos(an)*len,cy+Math.sin(an)*len);
+          lg.addColorStop(0,'rgba(255,236,190,'+al+')'); lg.addColorStop(1,'rgba(255,220,160,0)');
+          ctx.fillStyle=lg; ctx.beginPath(); ctx.moveTo(cx,cy);
+          ctx.lineTo(cx+Math.cos(an-r.w)*len,cy+Math.sin(an-r.w)*len);
+          ctx.lineTo(cx+Math.cos(an+r.w)*len,cy+Math.sin(an+r.w)*len); ctx.closePath(); ctx.fill();
+        }
+        ctx.globalCompositeOperation='source-over';
+      }
+    }
+
+    // core of light
+    ctx.globalCompositeOperation='lighter';
+    var cr=2+spark*8+I*(W*.05)+Math.sin(t*1.3)*I*2;
+    var cg=ctx.createRadialGradient(cx,cy,0,cx,cy,cr*4);
+    cg.addColorStop(0,'rgba(255,255,255,'+clamp(spark,0,1)+')'); cg.addColorStop(.25,'rgba(255,244,214,'+(.8*spark)+')'); cg.addColorStop(1,'rgba(255,214,140,0)');
+    ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx,cy,cr*4,0,6.283); ctx.fill();
+
+    // dust motes catching the light
+    for(i=0;i<dust.length;i++){var d=dust[i];
+      var px=((d.x+Math.sin(t*.05*d.z+d.p)*.03)%1)*W, py=(((d.y-t*.006*d.z)%1)+1)%1*H;
+      var lit=clamp(1-Math.hypot(px-cx,py-cy)/(W*.6),0,1);
+      var da=I*lit*(.25+.5*Math.sin(t*.8+d.p))*d.z; if(da<=.01)continue;
+      ctx.fillStyle='rgba(255,240,200,'+da+')'; ctx.beginPath(); ctx.arc(px,py,.6+d.z*1.3,0,6.283); ctx.fill();
+    }
+
+    // vignette
+    ctx.globalCompositeOperation='source-over';
+    var vg=ctx.createRadialGradient(cx,H*.5,H*.35,cx,H*.5,big*.75);
+    vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.6)');
+    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+
+    if(!reduce)requestAnimationFrame(frame);
+  }
+
+  size();
+  window.addEventListener('resize',function(){size(); if(reduce)requestAnimationFrame(frame)});
+  document.getElementById('again').addEventListener('click',function(){start=performance.now();verse.classList.remove('on');if(reduce)requestAnimationFrame(frame)});
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

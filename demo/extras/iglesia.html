@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  SITIO WEB PARA IGLESIA
+  ============================================================
+  Para personalizar: baja hasta el bloque "CONFIG" dentro de
+  la etiqueta <script> al final del archivo y cambia los textos,
+  horarios, grupos y datos de contacto. El resto del código no
+  hay que tocarlo.
+  ============================================================
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sitio de la iglesia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2A2419;
+    --paper:#F6F1E7;
+    --indigo:#2C3E63;
+    --indigo-deep:#1B2740;
+    --gold:#C9922E;
+    --gold-soft:#E4C888;
+    --sand:#DED0AF;
+    --line: rgba(42,36,25,0.14);
+    --radius: 14px;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.brand,.verse{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    margin:0;
+  }
+  .eyebrow, .mono{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:1060px; margin:0 auto; padding:0 24px; }
+  .rule{ height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent); margin:0; }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:var(--indigo-deep);
+    color:var(--paper);
+    border-bottom:1px solid rgba(246,241,231,0.1);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px; max-width:1060px; margin:0 auto;
+  }
+  .brand{ font-size:1.3rem; color:var(--paper); font-style:italic; }
+  .brand span{ color:var(--gold); font-style:normal; }
+  .nav-links{ display:flex; gap:26px; list-style:none; margin:0; padding:0; }
+  .nav-links a{
+    text-decoration:none; font-size:0.9rem; font-weight:500;
+    color:var(--paper); opacity:0.82; transition:opacity .2s;
+  }
+  .nav-links a:hover{ opacity:1; }
+  .nav-cta{
+    background:var(--gold); color:var(--indigo-deep); padding:9px 16px;
+    border-radius:100px; font-weight:700; font-size:0.85rem; text-decoration:none; white-space:nowrap;
+  }
+  .menu-toggle{ display:none; background:none; border:none; color:var(--paper); font-size:1.5rem; cursor:pointer; }
+
+  /* ---------- hero with radiant motif ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    background:var(--indigo-deep); color:var(--paper);
+    padding:96px 0 100px;
+  }
+  .hero-rays{
+    position:absolute; top:-40%; left:50%; transform:translateX(-50%);
+    width:1400px; height:1400px; pointer-events:none;
+    background:repeating-conic-gradient(
+      from 0deg,
+      rgba(201,146,46,0.10) 0deg 4deg,
+      transparent 4deg 12deg
+    );
+    -webkit-mask-image:radial-gradient(circle at center, black 0%, transparent 62%);
+            mask-image:radial-gradient(circle at center, black 0%, transparent 62%);
+  }
+  .hero-inner{ position:relative; z-index:2; max-width:620px; margin:0 auto; text-align:center; }
+  .hero .eyebrow{ color:var(--gold); }
+  .hero .verse{
+    font-style:italic; font-size:1.15rem; color:var(--gold-soft);
+    max-width:480px; margin:18px auto 0;
+  }
+  .hero h1{
+    font-size:clamp(2.3rem, 5vw, 3.4rem);
+    line-height:1.1; margin:16px 0 16px; font-style:italic;
+  }
+  .hero p.desc{ opacity:0.85; max-width:480px; margin:0 auto; }
+  .hero-actions{ display:flex; gap:14px; margin-top:32px; justify-content:center; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 26px; border-radius:100px;
+    font-weight:600; font-size:0.94rem; text-decoration:none;
+    border:1.5px solid transparent; cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{ background:var(--gold); color:var(--indigo-deep); }
+  .btn-ghost{ border-color:rgba(246,241,231,0.4); color:var(--paper); }
+
+  /* ---------- sections ---------- */
+  section{ padding:66px 0; }
+  .section-head{ max-width:580px; margin:0 auto 40px; text-align:center; }
+  .section-head .eyebrow{ color:var(--indigo); }
+  .section-head h2{ font-size:clamp(1.7rem,3vw,2.2rem); margin-top:8px; font-style:italic; }
+  .section-head p{ margin-top:12px; opacity:0.8; }
+
+  /* about */
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+  .stat-row{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:26px; }
+  .stat{ border:1px solid var(--line); border-radius:var(--radius); padding:18px; background:#fff; text-align:center; }
+  .stat .num{ font-family:'Cormorant Garamond',serif; font-size:1.9rem; color:var(--indigo); font-weight:600; }
+  .stat .lbl{ font-size:0.78rem; opacity:0.75; margin-top:4px; }
+
+  /* horarios */
+  .hours-wrap{ max-width:520px; margin:0 auto; }
+  .hours-table{ width:100%; border-collapse:collapse; }
+  .hours-table td{ padding:12px 4px; border-bottom:1px solid var(--line); font-size:0.98rem; }
+  .hours-table td:last-child{ text-align:right; font-family:'JetBrains Mono', monospace; font-size:0.85rem; color:var(--indigo); }
+
+  /* grupos */
+  .groups-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+  .group-card{
+    background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+    padding:26px; transition:transform .2s, box-shadow .2s;
+  }
+  .group-card:hover{ transform:translateY(-4px); box-shadow:0 10px 24px rgba(27,39,64,0.1); }
+  .group-icon{
+    width:44px; height:44px; border-radius:10px; background:var(--paper);
+    display:flex; align-items:center; justify-content:center; font-size:1.3rem; margin-bottom:14px;
+  }
+  .group-card h3{ font-size:1.15rem; font-style:italic; }
+  .group-card p{ font-size:0.92rem; opacity:0.8; margin:8px 0 12px; }
+  .group-meta{ font-family:'JetBrains Mono', monospace; font-size:0.76rem; color:var(--indigo); opacity:0.85; }
+
+  /* eventos */
+  .events-list{ display:flex; flex-direction:column; gap:0; max-width:680px; margin:0 auto; }
+  .event-row{
+    display:grid; grid-template-columns:90px 1fr; gap:20px;
+    padding:20px 0; border-bottom:1px solid var(--line); align-items:center;
+  }
+  .event-date{
+    background:var(--indigo-deep); color:var(--paper); border-radius:10px;
+    text-align:center; padding:10px 6px; font-family:'JetBrains Mono', monospace;
+  }
+  .event-date .d{ font-size:1.3rem; font-weight:700; line-height:1; }
+  .event-date .m{ font-size:0.65rem; text-transform:uppercase; opacity:0.8; margin-top:2px; }
+  .event-title{ font-weight:600; font-size:1.02rem; }
+  .event-desc{ font-size:0.88rem; opacity:0.78; margin-top:4px; }
+
+  /* voces */
+  .testi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .testi{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:22px; }
+  .testi p{ font-style:italic; font-size:0.96rem; }
+  .testi .who{ margin-top:14px; font-size:0.8rem; font-weight:600; opacity:0.7; font-style:normal; font-family:'Work Sans',sans-serif; }
+
+  /* contacto */
+  .contact-card{
+    background:var(--indigo-deep); color:var(--paper);
+    border-radius:var(--radius); padding:34px; max-width:640px; margin:0 auto; text-align:center;
+  }
+  .contact-card h3{ font-style:italic; font-size:1.5rem; }
+  .contact-card p{ opacity:0.85; margin:10px 0 22px; font-size:0.94rem; }
+  .contact-rows{ display:flex; flex-direction:column; gap:10px; align-items:center; margin-bottom:20px; }
+  .contact-row{ display:flex; align-items:center; gap:10px; font-size:0.92rem; }
+
+  footer{
+    background:var(--indigo-deep); color:var(--paper);
+    padding:32px 0; text-align:center; font-size:0.85rem; opacity:0.7;
+  }
+
+  .wa-float{
+    position:fixed; bottom:22px; right:22px; z-index:60;
+    background:#25D366; color:#fff; width:58px; height:58px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:1.6rem;
+    text-decoration:none; box-shadow:0 8px 20px rgba(0,0,0,0.25);
+    animation:pulse 2.4s ease-in-out 1;
+  }
+  @keyframes pulse{ 0%{transform:scale(1);} 50%{transform:scale(1.08);} 100%{transform:scale(1);} }
+
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (max-width:820px){
+    .nav-links{
+      position:fixed; inset:58px 0 auto 0; background:var(--indigo-deep);
+      flex-direction:column; padding:18px 24px; gap:16px;
+      transform:translateY(-120%); transition:transform .25s ease;
+    }
+    .nav-links.open{ transform:translateY(0); }
+    .menu-toggle{ display:block; }
+    .about-grid{ grid-template-columns:1fr; }
+    .groups-grid{ grid-template-columns:1fr 1fr; }
+    .testi-grid{ grid-template-columns:1fr; }
+    .stat-row{ grid-template-columns:1fr 1fr 1fr; }
+  }
+  @media (max-width:480px){
+    .groups-grid{ grid-template-columns:1fr; }
+    .stat-row{ grid-template-columns:1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ transition:none; opacity:1; transform:none; }
+    .wa-float{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="brand" id="brandName">Iglesia</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#horarios">Horarios</a></li>
+      <li><a href="#grupos">Grupos</a></li>
+      <li><a href="#eventos">Eventos</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a class="nav-cta" id="navCta" href="#" target="_blank">Escríbenos</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-rays"></div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow" id="heroEyebrow">Bienvenido</div>
+    <h1 id="heroTitle">Título</h1>
+    <p class="verse" id="heroVerse"></p>
+    <p class="desc" id="heroText"></p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#horarios">Ver horarios de culto</a>
+      <a class="btn btn-ghost" id="heroCta" href="#" target="_blank">Escríbenos por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section id="nosotros">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <div class="eyebrow">Quiénes somos</div>
+      <h2 id="aboutTitle" style="font-size:2rem; margin-top:8px;"></h2>
+      <p id="aboutText" style="margin-top:14px; opacity:0.85;"></p>
+    </div>
+    <div class="stat-row reveal" id="statRow"></div>
+  </div>
+</section>
+
+<section id="horarios" style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Cuándo nos reunimos</div>
+      <h2>Horarios de culto</h2>
+    </div>
+    <div class="hours-wrap reveal">
+      <table class="hours-table" id="hoursTable"></table>
+      <p style="margin-top:18px; font-size:0.9rem; opacity:0.75; text-align:center;" id="addressText"></p>
+    </div>
+  </div>
+</section>
+
+<section id="grupos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Vida en comunidad</div>
+      <h2>Grupos y estudios</h2>
+      <p>Espacios más pequeños para crecer juntos, hacer preguntas y estudiar la Palabra en confianza.</p>
+    </div>
+    <div class="groups-grid" id="groupsGrid"></div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section id="eventos" style="background:#fff;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Agenda</div>
+      <h2>Próximos eventos</h2>
+    </div>
+    <div class="events-list" id="eventsList"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Testimonios</div>
+      <h2>Voces de la comunidad</h2>
+    </div>
+    <div class="testi-grid" id="testiGrid"></div>
+  </div>
+</section>
+
+<section id="contacto" style="background:#fff;">
+  <div class="wrap">
+    <div class="contact-card reveal">
+      <h3>Te esperamos</h3>
+      <p id="contactText"></p>
+      <div class="contact-rows" id="contactRows"></div>
+      <a class="btn btn-primary" id="contactCta" href="#" target="_blank">Escribir por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" id="footerText"></div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="#" target="_blank" aria-label="Escribir por WhatsApp">💬</a>
+
+<script>
+/* ============================================================
+   CONFIG — cambia aquí los datos de tu iglesia
+   ============================================================ */
+const CONFIG = {
+  brand: "Iglesia Metodista Jaruco",
+  whatsappNumber: "5355555555", // sin + ni espacios
+  whatsappMessage: "Hola, vi la página de la iglesia y me gustaría más información",
+
+  hero: {
+    eyebrow: "Una comunidad en Jaruco",
+    title: "Un lugar para crecer en fe y en comunidad",
+    verse: "“Ni lo alto ni lo profundo... nos podrá separar del amor de Dios.” — Romanos 8:39",
+    text: "Nos reunimos cada semana para adorar, estudiar la Palabra y acompañarnos como familia. Todos son bienvenidos, sin importar dónde estén en su camino de fe.",
+  },
+
+  about: {
+    title: "Una familia, no solo un lugar",
+    text: "Somos una congregación metodista que cree en la fe vivida en comunidad: grupos pequeños de estudio, acompañamiento real y puertas abiertas para cualquiera que quiera acercarse, con preguntas o sin ellas.",
+    stats: [
+      { num: "3", lbl: "grupos de estudio activos" },
+      { num: "52", lbl: "semanas de encuentro al año" },
+      { num: "+", lbl: "puertas siempre abiertas" },
+    ],
+  },
+
+  hours: [
+    { day: "Culto dominical", time: "10:00 am" },
+    { day: "Estudio bíblico (miércoles)", time: "6:30 pm" },
+    { day: "Grupo de jóvenes (viernes)", time: "7:00 pm" },
+  ],
+  address: "📍 Iglesia Metodista, Jaruco, Mayabeque",
+
+  groups: [
+    { icon: "📖", name: "Estudio bíblico", desc: "Profundizamos un pasaje cada semana, con guías de discusión y espacio para preguntas.", meta: "Miércoles · 6:30 pm" },
+    { icon: "🙏", name: "Grupo de oración", desc: "Un espacio íntimo para orar unos por otros y por la comunidad.", meta: "Martes · 7:00 pm" },
+    { icon: "🌱", name: "Jóvenes", desc: "Encuentro para jóvenes: fe, amistad y preguntas sin filtro.", meta: "Viernes · 7:00 pm" },
+  ],
+
+  events: [
+    { d: "12", m: "Ago", title: "Encuentro comunitario", desc: "Tarde de convivencia y estudio abierto para toda la congregación." },
+    { d: "19", m: "Ago", title: "Vigilia de oración", desc: "Noche de oración especial, abierta a todos." },
+    { d: "26", m: "Ago", title: "Grupo de discusión: Romanos 8", desc: "Continuamos la guía de estudio sobre la esperanza en Romanos 8." },
+  ],
+
+  testimonials: [
+    { text: "Encontré una familia, no solo una iglesia.", who: "Yosvani" },
+    { text: "Los grupos pequeños me ayudaron a hacer las preguntas que no me atrevía a hacer en público.", who: "Liliana" },
+    { text: "Siempre hay alguien esperándote con los brazos abiertos.", who: "Ernesto" },
+  ],
+
+  contact: {
+    text: "Escríbenos si tienes preguntas, quieres unirte a un grupo o simplemente quieres visitarnos el domingo.",
+    phoneDisplay: "+53 5 555 5555",
+    email: "iglesia@ejemplo.com",
+  },
+
+  footer: "© 2026 Iglesia Metodista Jaruco",
+};
+
+/* ============================================================
+   Render — no hace falta tocar esto
+   ============================================================ */
+const waLink = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`;
+
+document.getElementById('brandName').innerHTML = CONFIG.brand;
+document.getElementById('navCta').href = waLink;
+document.getElementById('heroCta').href = waLink;
+document.getElementById('contactCta').href = waLink;
+document.getElementById('waFloat').href = waLink;
+
+document.getElementById('heroEyebrow').textContent = CONFIG.hero.eyebrow;
+document.getElementById('heroTitle').textContent = CONFIG.hero.title;
+document.getElementById('heroVerse').textContent = CONFIG.hero.verse;
+document.getElementById('heroText').textContent = CONFIG.hero.text;
+
+document.getElementById('aboutTitle').textContent = CONFIG.about.title;
+document.getElementById('aboutText').textContent = CONFIG.about.text;
+document.getElementById('statRow').innerHTML = CONFIG.about.stats.map(s => `
+  <div class="stat"><div class="num">${s.num}</div><div class="lbl">${s.lbl}</div></div>
+`).join('');
+
+document.getElementById('hoursTable').innerHTML = CONFIG.hours.map(h => `
+  <tr><td>${h.day}</td><td>${h.time}</td></tr>
+`).join('');
+document.getElementById('addressText').textContent = CONFIG.address;
+
+document.getElementById('groupsGrid').innerHTML = CONFIG.groups.map(g => `
+  <div class="group-card">
+    <div class="group-icon">${g.icon}</div>
+    <h3>${g.name}</h3>
+    <p>${g.desc}</p>
+    <div class="group-meta">${g.meta}</div>
+  </div>
+`).join('');
+
+document.getElementById('eventsList').innerHTML = CONFIG.events.map(e => `
+  <div class="event-row">
+    <div class="event-date"><div class="d">${e.d}</div><div class="m">${e.m}</div></div>
+    <div>
+      <div class="event-title">${e.title}</div>
+      <div class="event-desc">${e.desc}</div>
+    </div>
+  </div>
+`).join('');
+
+document.getElementById('testiGrid').innerHTML = CONFIG.testimonials.map(t => `
+  <div class="testi"><p>“${t.text}”</p><div class="who">${t.who}</div></div>
+`).join('');
+
+document.getElementById('contactText').textContent = CONFIG.contact.text;
+document.getElementById('contactRows').innerHTML = `
+  <div class="contact-row">📞 ${CONFIG.contact.phoneDisplay}</div>
+  <div class="contact-row">✉️ ${CONFIG.contact.email}</div>
+`;
+
+document.getElementById('footerText').textContent = CONFIG.footer;
+
+const toggle = document.getElementById('menuToggle');
+const links = document.getElementById('navLinks');
+toggle.addEventListener('click', () => links.classList.toggle('open'));
+links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

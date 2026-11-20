@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>El Libro de la Familia</title>
+<style>
+:root{--ink:#3b2616;--paper:#f0e1bd;--paper2:#e3cc9f;--red:#7d2a1a;--gold:#c9a24a;--ink-blue:#1f3a6b}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:radial-gradient(ellipse at 50% 35%,#3a2518,#120a05 78%);color:var(--ink);font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;overflow:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+#stage{perspective:1700px;width:min(92vw,calc(76vh*.74),470px);aspect-ratio:3/4.05;position:relative;touch-action:pan-y}
+.pg{position:absolute;inset:0;transform-origin:left center;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:4px 14px 14px 4px;padding:9% 9% 11% 12%;overflow:hidden;display:flex;flex-direction:column;
+background:radial-gradient(circle at 18% 12%,rgba(120,80,30,.12),transparent 40%),radial-gradient(circle at 88% 92%,rgba(120,80,30,.18),transparent 45%),linear-gradient(100deg,#d3b982 0,var(--paper) 7%,var(--paper) 93%,var(--paper2));
+box-shadow:inset 0 0 55px rgba(110,70,20,.5),inset 9px 0 14px -6px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.6);
+transition:transform .95s cubic-bezier(.6,.05,.25,1),opacity .2s}
+.pg.gone{transform:rotateY(-165deg);opacity:0;pointer-events:none;transition:transform .95s cubic-bezier(.6,.05,.25,1),opacity .2s .75s}
+.pg.far{visibility:hidden}
+.cover{background:radial-gradient(circle at 30% 22%,#7d4d2b,#4a2a16 60%,#26130a);color:var(--gold);align-items:center;justify-content:center;text-align:center;cursor:pointer;
+box-shadow:inset 0 0 0 11px rgba(0,0,0,.22),inset 0 0 0 13px rgba(201,162,74,.55),inset 0 0 60px rgba(0,0,0,.6),0 18px 40px rgba(0,0,0,.65)}
+.cover h1{font-weight:normal;font-size:clamp(1.7rem,7.4vw,2.6rem);line-height:1.15;text-shadow:0 2px 0 rgba(0,0,0,.55)}
+.cover .orn{font-size:2rem;margin:.55em 0;opacity:.9}
+.cover small{font-style:italic;opacity:.85;animation:pulso 2.4s infinite}
+@keyframes pulso{50%{opacity:.25}}
+h2{font-weight:normal;font-size:clamp(1.25rem,5.4vw,1.7rem);line-height:1.2;color:var(--red);text-align:center;border-bottom:1px solid rgba(125,42,26,.4);padding-bottom:.45em;margin-bottom:.9em}
+.kick{text-align:center;font-style:italic;opacity:.65;margin-bottom:.35em;font-size:.95rem}
+.txt{font-size:clamp(.92rem,3.9vw,1.08rem);line-height:1.58;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.txt p+p{margin-top:.7em}
+.txt p:first-child::first-letter{float:left;font-size:3.4em;line-height:.8;padding:.07em .1em 0 0;color:var(--red)}
+.frase{margin-top:1em;text-align:center;font-style:italic;color:var(--red);font-size:1.05rem}
+.num{position:absolute;bottom:4%;left:0;right:0;text-align:center;font-size:.8rem;opacity:.55}
+.stain{position:absolute;right:7%;bottom:8%;width:66px;height:66px;border:0;border-radius:50%;cursor:pointer;transition:transform .3s;
+background:radial-gradient(circle at 45% 45%,rgba(110,60,20,.05) 34%,rgba(110,60,20,.42) 55%,rgba(110,60,20,.1) 68%,transparent 72%)}
+.stain:hover,.stain:focus-visible{transform:scale(1.15) rotate(8deg);outline:2px dashed rgba(125,42,26,.5)}
+.note{position:absolute;right:6%;bottom:22%;width:64%;font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive;font-size:.88rem;line-height:1.4;color:var(--ink-blue);background:#f8efa6;padding:.7em .85em;box-shadow:2px 3px 9px rgba(0,0,0,.35);transform:rotate(-3deg) scale(.5);opacity:0;pointer-events:none;transition:.35s}
+.note.on{opacity:1;transform:rotate(-3deg) scale(1)}
+.idx{list-style:none;margin-top:.3em}
+.idx li{display:flex;gap:.5em;align-items:baseline;padding:.6em 0;cursor:pointer;font-size:1.05rem}
+.idx li:hover,.idx li:focus-visible{color:var(--red);outline:0}
+.idx li i{flex:1;border-bottom:2px dotted rgba(59,38,22,.4);transform:translateY(-.25em)}
+.pie{margin-top:auto;font-size:.8rem;font-style:italic;opacity:.7;text-align:center;line-height:1.4}
+.lines{flex:1;margin-top:.6em;width:100%;border:0;resize:none;outline:0;font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive;font-size:.92rem;color:var(--ink-blue);line-height:1.9em;padding:0 .3em;background:repeating-linear-gradient(transparent 0 1.9em,rgba(59,38,22,.28) 1.9em calc(1.9em + 1px))}
+.lines::placeholder{color:rgba(59,38,22,.4)}
+.lines{min-height:0}
+.acciones{display:flex;flex-wrap:wrap;gap:.5em;align-items:center;margin:.55em 0 .2em;font-size:.8rem}
+.acciones button{font:inherit;background:var(--red);color:#f6e8c8;border:1px solid var(--red);border-radius:14px;padding:.4em .9em;cursor:pointer}
+.acciones button.sec{background:transparent;color:var(--red)}
+.acciones button:focus-visible{outline:2px solid var(--ink)}
+#estado{font-style:italic;opacity:.75}
+nav{display:flex;gap:16px;align-items:center;color:#d9c192;font-size:.85rem;min-height:40px}
+nav button{background:#2b1a0f;color:#e8d3a0;border:1px solid #6b4a2a;border-radius:20px;padding:.5em 1.2em;font:inherit;cursor:pointer}
+nav button:hover:not(:disabled){background:#3d2615}
+nav button:disabled{opacity:.3;cursor:default}
+nav button:focus-visible{outline:2px solid var(--gold)}
+@media (prefers-reduced-motion:reduce){.pg,.pg.gone,.note{transition-duration:.01s;transition-delay:0s}.cover small{animation:none}}
+</style>
+</head>
+<body>
+<div id="stage" aria-live="polite"></div>
+<nav><button id="prev" type="button">‹ Anterior</button><span id="cnt"></span><button id="next" type="button">Siguiente ›</button></nav>
+
+<script>
+/* ============================================================
+   EDITA AQUÍ: todo el contenido del libro está en este bloque.
+   (Los textos actuales son inventados, solo de prueba.)
+   ============================================================ */
+const LIBRO = {
+  familia: "Familia Ejemplo",
+  aviso: "Contenido de prueba: todo lo escrito aquí es inventado.",
+  capitulos: [
+    { titulo: "Los dichos de la abuela Rosa", kick: "Capítulo primero",
+      texto: ["Desde tiempos inmemoriales, la abuela Rosa gobernó la cocina con una sola ley, repetida cada día a la hora del almuerzo. No importaba que el plato acabara de salir del fuego: la advertencia llegaba antes que la comida.",
+              "Se cuenta que nadie, en toda la historia de la familia, logró sentarse a la mesa sin escucharla."],
+      frase: "«¡Coman, que se enfría!»",
+      nota: "Dato verificado por la propia abuela: la comida siempre estuvo hirviendo." },
+    { titulo: "Las hazañas del tío Pepe", kick: "Capítulo segundo",
+      texto: ["Cuentan las crónicas que el tío Pepe pescó una vez el pez más grande jamás visto en estas tierras. Nadie lo vio, pero todos lo han escuchado muchas veces.",
+              "En cada reunión familiar el pez crece un poquito más. Los expertos calculan que, a este ritmo, ya no cabría en la sala."],
+      frase: "«Y eso que se me escapó el grande».",
+      nota: "La última vez que lo contó, el pez ya tenía bigote." },
+    { titulo: "El Capitán Danielito", kick: "Capítulo tercero",
+      texto: ["Desde los cuatro años, el primo Danielito asumió el mando de todas las operaciones familiares: quién juega, quién espera y quién recoge los juguetes.",
+              "Hasta hoy no se ha registrado ningún motín exitoso."],
+      frase: "«¡Aquí mando yo!»",
+      nota: "Los abuelos se rindieron sin condiciones." },
+    { titulo: "La noche del apagón", kick: "Capítulo cuarto",
+      texto: ["Aquella noche se fue la luz y la familia entera cenó a la luz de las velas. Nadie sabe quién empezó a cantar, pero nadie quiso parar.",
+              "Cuando volvió la corriente, alguien la apagó otra vez. Había que terminar la canción."],
+      frase: "«Mejor así: a oscuras, pero juntos».",
+      nota: "Desafinamos todos. Fue perfecto." }
+  ],
+  cierre: "Aquí se escribe la próxima página",
+  cierreTexto: "Los libros de familia nunca se terminan. Escribe aquí el próximo recuerdo:"
+};
+
+/* ---------------- Construcción del libro ---------------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stage = document.getElementById('stage');
+const pages = [];
+let cur = 0;
+
+function add(html, cls) {
+  const d = document.createElement('section');
+  d.className = 'pg ' + (cls || '');
+  d.innerHTML = html;
+  stage.appendChild(d);
+  pages.push(d);
+  d.style.zIndex = 100 - pages.length;
+  return d;
+}
+
+// 0 · Portada
+add(`<span class="orn">❦</span><h1>El Libro de la<br>${esc(LIBRO.familia)}</h1><span class="orn">❦</span><small>Toca para abrir</small>`, 'cover');
+
+// 1 · Índice
+add(`<p class="kick">Índice</p><h2>Lo que aquí se cuenta</h2>
+<ul class="idx">${LIBRO.capitulos.map((c, i) => `<li tabindex="0" data-go="${i + 2}"><span>${esc(c.titulo)}</span><i></i><span>${i + 3}</span></li>`).join('')}</ul>
+<p class="pie">Toca las manchas de café de cada página:<br>algunas guardan notas escondidas.<br><br>${esc(LIBRO.aviso)}</p><div class="num">1</div>`);
+
+// 2.. · Capítulos
+LIBRO.capitulos.forEach((c, i) => {
+  add(`<p class="kick">${esc(c.kick)}</p><h2>${esc(c.titulo)}</h2>
+<div class="txt">${c.texto.map(t => `<p>${esc(t)}</p>`).join('')}</div>
+<p class="frase">${esc(c.frase)}</p>
+<div class="note">${esc(c.nota)}</div>
+<button class="stain" type="button" aria-label="Mancha de café: leer la nota"></button>
+<div class="num">${i + 2}</div>`);
+});
+
+// Última · Página para escribir
+add(`<p class="kick">Y la historia sigue</p><h2>${esc(LIBRO.cierre)}</h2>
+<p class="txt" style="text-align:center">${esc(LIBRO.cierreTexto)}</p>
+<textarea class="lines" placeholder="Había una vez…" aria-label="Escribe el próximo recuerdo"></textarea>
+<div class="acciones"><button id="guardar" type="button">Guardar</button><button id="bajar" type="button" class="sec">Descargar copia</button><span id="estado"></span></div>
+<div class="num">${pages.length}</div>`);
+
+/* ---------------- Navegación ---------------- */
+const prev = document.getElementById('prev'), next = document.getElementById('next'), cnt = document.getElementById('cnt');
+function go(n) {
+  cur = Math.max(0, Math.min(pages.length - 1, n));
+  pages.forEach((p, i) => {
+    p.classList.toggle('gone', i < cur);
+    p.classList.toggle('far', i > cur + 1);
+    if (i !== cur) p.querySelectorAll('.note.on').forEach(x => x.classList.remove('on'));
+  });
+  prev.disabled = cur === 0;
+  next.disabled = cur === pages.length - 1;
+  cnt.textContent = cur === 0 ? 'Portada' : cur + ' / ' + (pages.length - 1);
+}
+prev.onclick = () => go(cur - 1);
+next.onclick = () => go(cur + 1);
+
+document.addEventListener('keydown', e => {
+  if (/TEXTAREA|INPUT/.test(e.target.tagName)) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') go(cur + 1);
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(cur - 1);
+  else if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset && e.target.dataset.go) { e.preventDefault(); go(+e.target.dataset.go); }
+});
+
+let x0 = null, swiped = false;
+stage.addEventListener('pointerdown', e => { x0 = e.clientX; });
+stage.addEventListener('pointerup', e => {
+  if (x0 === null) return;
+  const dx = e.clientX - x0; x0 = null;
+  if (Math.abs(dx) > 50 && !/TEXTAREA/.test(e.target.tagName)) {
+    swiped = true; setTimeout(() => swiped = false, 80);
+    go(dx < 0 ? cur + 1 : cur - 1);
+  }
+});
+stage.addEventListener('click', e => {
+  if (swiped) return;
+  const t = e.target;
+  if (t.closest('.stain')) { t.closest('.pg').querySelector('.note').classList.toggle('on'); return; }
+  const li = t.closest('li[data-go]');
+  if (li) { go(+li.dataset.go); return; }
+  if (t.closest('.cover')) { go(1); return; }
+  if (t.closest('textarea,.note,.acciones')) return;
+  const r = stage.getBoundingClientRect(), f = (e.clientX - r.left) / r.width;
+  if (f > .72) go(cur + 1); else if (f < .22) go(cur - 1);
+});
+
+/* ---------------- Escribir y guardar ---------------- */
+const KEY = 'libro-familia:' + LIBRO.familia;
+const ta = document.querySelector('.lines'), estado = document.getElementById('estado');
+const msg = t => { estado.textContent = t; };
+try { const g = localStorage.getItem(KEY); if (g) { ta.value = g; msg('Recuerdo guardado antes.'); } } catch (e) {}
+function guardar() {
+  try { localStorage.setItem(KEY, ta.value); msg('Guardado ✓'); }
+  catch (e) { msg('No se pudo guardar aquí: usa «Descargar copia».'); }
+}
+document.getElementById('guardar').onclick = guardar;
+ta.addEventListener('input', () => { msg(''); clearTimeout(ta._t); ta._t = setTimeout(guardar, 1200); });
+document.getElementById('bajar').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ta.value], { type: 'text/plain;charset=utf-8' }));
+  a.download = 'proxima-pagina.txt';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 500);
+};
+
+go(0);
+</script>
+</body>
+</html>

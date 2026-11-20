@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Casco Cyberpunk 3D</title>
+<style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0;background:#07050f;overflow:hidden;font-family:"Courier New",monospace}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.hud{position:fixed;left:16px;top:calc(env(safe-area-inset-top,0px) + 12px);color:#00f0ff;text-shadow:0 0 8px #00f0ff;pointer-events:none;font-size:13px;letter-spacing:2px}
+.hud b{display:block;color:#ff2bd6;text-shadow:0 0 10px #ff2bd6;font-size:18px}
+.hint{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);width:100%;text-align:center;color:#8a7fb0;font-size:12px;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud"><b>NEON-HELM // MK-7</b>SISTEMA ONLINE</div>
+<div class="hint">Arrastra para rotar · rueda / pellizco para zoom</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const cv=document.getElementById('c');
+const R=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));
+const S=new THREE.Scene();S.background=new THREE.Color(0x07050f);S.fog=new THREE.FogExp2(0x07050f,0.06);
+const cam=new THREE.PerspectiveCamera(45,1,0.1,100);
+const CY=0x00f0ff,MG=0xff2bd6;
+const dark=new THREE.MeshStandardMaterial({color:0x14141f,metalness:.9,roughness:.3});
+const dark2=new THREE.MeshStandardMaterial({color:0x232336,metalness:.8,roughness:.4});
+const glow=(c)=>new THREE.MeshBasicMaterial({color:c});
+const H=new THREE.Group();S.add(H);
+function add(g,m,x,y,z,p){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);if(p)p(o);H.add(o);return o}
+// shell
+add(new THREE.SphereGeometry(1,48,32),dark,0,.15,0,o=>o.scale.set(1,1.1,1.15));
+// jaw / mask
+add(new THREE.BoxGeometry(1.3,.55,.9),dark2,0,-.9,.55);
+add(new THREE.CylinderGeometry(.35,.35,.3,16),dark2,0,-.95,1.05,o=>o.rotation.x=Math.PI/2);
+for(let i=-2;i<=2;i++)add(new THREE.BoxGeometry(.05,.3,.04),glow(MG),i*.15,-.95,1.08);
+// visor
+const visor=add(new THREE.BoxGeometry(1.55,.3,.2),glow(CY),0,.15,1.0,o=>o.rotation.x=-.05);
+add(new THREE.BoxGeometry(1.75,.5,.12),dark2,0,.15,.93);
+add(new THREE.BoxGeometry(1.2,.04,.05),glow(MG),0,-.12,1.1);
+// ear cups
+[-1,1].forEach(s=>{
+ add(new THREE.CylinderGeometry(.42,.42,.35,24),dark2,s*1.05,.1,0,o=>o.rotation.z=Math.PI/2);
+ add(new THREE.TorusGeometry(.3,.04,8,32),glow(MG),s*1.25,.1,0,o=>o.rotation.y=Math.PI/2);
+ add(new THREE.CylinderGeometry(.03,.03,.9,8),dark,s*1.1,.9,-.2);
+ add(new THREE.SphereGeometry(.07,12,12),glow(0xff2040),s*1.1,1.38,-.2);
+});
+// top ridge
+for(let i=0;i<7;i++){const a=-.8+i*.27;
+ add(new THREE.BoxGeometry(.12,.28-Math.abs(i-3)*.03,.14),dark2,0,Math.cos(a)*1.18+.15,Math.sin(a)*1.1);
+ add(new THREE.BoxGeometry(.04,.04,.15),glow(i%2?CY:MG),0,Math.cos(a)*1.35+.2,Math.sin(a)*1.25);}
+// back cables
+for(let i=0;i<3;i++)add(new THREE.TorusGeometry(.55,.04,8,24,Math.PI),dark,(i-1)*.3,-.5,-.95,o=>o.rotation.x=Math.PI/2);
+// platform + grid
+const base=new THREE.Mesh(new THREE.CylinderGeometry(1.8,2,.2,48),dark);base.position.y=-1.6;S.add(base);
+const ring=new THREE.Mesh(new THREE.TorusGeometry(1.85,.03,8,64),glow(CY));ring.rotation.x=Math.PI/2;ring.position.y=-1.49;S.add(ring);
+const grid=new THREE.GridHelper(60,60,MG,0x3a1a5c);grid.position.y=-1.7;S.add(grid);
+// rain particles
+const N=500,pos=new Float32Array(N*3);
+for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*14;pos[i*3+1]=Math.random()*8-1.7;pos[i*3+2]=(Math.random()-.5)*14}
+const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
+S.add(new THREE.Points(pg,new THREE.PointsMaterial({color:CY,size:.04,transparent:true,opacity:.7})));
+// lights
+S.add(new THREE.AmbientLight(0x30284a,1.2));
+const l1=new THREE.PointLight(CY,2.2,12);l1.position.set(3,2,3);S.add(l1);
+const l2=new THREE.PointLight(MG,2.5,12);l2.position.set(-3,1,2);S.add(l2);
+const l3=new THREE.PointLight(0x6a2bff,1.5,10);l3.position.set(0,3,-3);S.add(l3);
+// orbit
+let th=.5,ph=1.25,rad=6.5,drag=false,px=0,py=0,auto=true;
+const down=(x,y)=>{drag=true;auto=false;px=x;py=y;cv.style.cursor='grabbing'};
+const move=(x,y)=>{if(!drag)return;th-=(x-px)*.01;ph=Math.min(2.2,Math.max(.4,ph-(y-py)*.01));px=x;py=y};
+cv.addEventListener('mousedown',e=>down(e.clientX,e.clientY));
+addEventListener('mousemove',e=>move(e.clientX,e.clientY));
+addEventListener('mouseup',()=>{drag=false;cv.style.cursor='grab'});
+cv.addEventListener('touchstart',e=>{if(e.touches.length==1)down(e.touches[0].clientX,e.touches[0].clientY)},{passive:true});
+cv.addEventListener('touchmove',e=>{if(e.touches.length==1)move(e.touches[0].clientX,e.touches[0].clientY);else if(e.touches.length==2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);if(window._d)rad=Math.min(12,Math.max(3,rad-(d-window._d)*.02));window._d=d}},{passive:true});
+cv.addEventListener('touchend',()=>{drag=false;window._d=0});
+cv.addEventListener('wheel',e=>{e.preventDefault();rad=Math.min(12,Math.max(3,rad+e.deltaY*.005))},{passive:false});
+function resize(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+addEventListener('resize',resize);resize();
+const clock=new THREE.Clock();
+(function loop(){
+ const t=clock.getElapsedTime();
+ if(auto)th+=.004;
+ cam.position.set(rad*Math.sin(ph)*Math.sin(th),rad*Math.cos(ph),rad*Math.sin(ph)*Math.cos(th));
+ cam.lookAt(0,-.2,0);
+ H.position.y=Math.sin(t*1.5)*.06;
+ visor.material.color.setHex(Math.sin(t*3)>.95?0xffffff:CY);
+ ring.material.color.setHSL(.5+.1*Math.sin(t),1,.5);
+ l1.intensity=2+Math.sin(t*2)*.5;l2.intensity=2.3+Math.cos(t*2.3)*.6;
+ const p=pg.attributes.position;
+ for(let i=0;i<N;i++){let y=p.getY(i)-.06;if(y<-1.7)y=6.3;p.setY(i,y)}
+ p.needsUpdate=true;
+ R.render(S,cam);requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

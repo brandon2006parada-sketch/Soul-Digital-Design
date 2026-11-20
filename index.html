@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soul Digital Design · Plantillas digitales personalizadas</title>
+<meta name="description" content="Cartas que se escriben solas, cumpleaños con fotos, el Libro de la Familia y una plantilla a tu medida. Elige, mira la demo y pídela personalizada.">
+<meta property="og:title" content="Soul Digital Design · Plantillas digitales personalizadas">
+<meta property="og:description" content="Una plantilla para cada ocasión. Mírala funcionando y pídela con tu contenido.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/cartas.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0503'/%3E%3Cpath d='M22 46h20v6H22z' fill='%23e8cf9a'/%3E%3Cpath d='M32 12c6 8 9 13 9 18a9 9 0 1 1-18 0c0-5 3-10 9-18z' fill='%23f9e3ae'/%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0503;--gold:#e8cf9a;--gold-soft:#c9ae78;--line:rgba(232,207,154,.16);--warm:#ff9a3c;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--gold);font-family:Georgia,'Palatino Linotype',serif;line-height:1.62;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 85% 55% at 50% 112%,rgba(255,150,60,.24),rgba(150,70,20,.10) 45%,transparent 72%)}
+a{color:inherit}
+img{display:block;max-width:100%}
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 22px}
+.eyebrow{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);display:block;margin-bottom:12px}
+.hand{font-family:'Segoe Script','Lucida Handwriting','Bradley Hand','Brush Script MT',cursive}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:rgba(10,5,3,.8);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:18px;height:64px}
+.brand{font-size:1.02rem;letter-spacing:.02em;white-space:nowrap;text-decoration:none}
+.brand b{font-weight:400;color:#f6e4b6}
+.nav nav{margin-left:auto;display:flex;align-items:center;gap:22px;font-size:.85rem}
+.nav nav a{text-decoration:none;opacity:.72}
+.nav nav a:hover{opacity:1}
+
+/* ---------- botones ---------- */
+.btn-gold,.btn-ghost,.btn-line{display:inline-block;text-decoration:none;border-radius:999px;font-size:.9rem;padding:.72em 1.35em;transition:transform .15s,box-shadow .2s,background .2s;cursor:pointer;border:0;font-family:inherit;text-align:center;line-height:1.3}
+.btn-gold{background:linear-gradient(180deg,#f9e3ae,#d8a856);color:#2b1a0d;font-weight:700;box-shadow:0 10px 26px rgba(216,168,86,.22)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(216,168,86,.32)}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid rgba(232,207,154,.32)}
+.btn-ghost:hover{background:rgba(232,207,154,.08)}
+.btn-line{background:rgba(30,15,6,.6);border:1px solid rgba(232,207,154,.28);color:var(--gold);font-size:.82rem;padding:.6em 1.05em}
+.btn-line:hover{background:rgba(232,207,154,.1)}
+.btn-sm{font-size:.8rem;padding:.6em 1.05em}
+.nav-cta{padding:.55em 1.1em!important;font-size:.8rem!important}
+
+/* ---------- hero ---------- */
+.hero{padding:78px 0 46px;text-align:center}
+.hero .wrap{max-width:860px}
+.kicker{display:inline-block;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);border:1px solid var(--line);border-radius:999px;padding:.5em 1em;margin-bottom:20px}
+h1{font-size:clamp(2rem,4.3vw,3rem);line-height:1.14;font-weight:400;letter-spacing:-.01em}
+h1 em{font-style:normal;color:#f9e3ae;text-shadow:0 0 34px rgba(255,160,60,.35)}
+.lead{margin:18px auto 0;font-size:1rem;opacity:.84;max-width:33em}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;justify-content:center}
+.mini{list-style:none;display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:24px;font-size:.79rem;opacity:.7;justify-content:center}
+.mini li::before{content:"✓";color:#f9e3ae;margin-right:.45em}
+
+/* ---------- secciones ---------- */
+section{padding:70px 0;scroll-margin-top:78px}
+.sec-head{max-width:48em;margin-bottom:32px}
+.sec-head h2{font-size:clamp(1.6rem,3vw,2.25rem);font-weight:400;line-height:1.2}
+.sec-head p{margin-top:12px;opacity:.72}
+
+/* ---------- filtros + galería ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{background:transparent;border:1px solid rgba(232,207,154,.24);color:var(--gold);border-radius:999px;padding:.5em 1em;font:inherit;font-size:.8rem;cursor:pointer;opacity:.75;transition:.15s}
+.chip:hover{opacity:1;background:rgba(232,207,154,.07)}
+.chip.on{background:linear-gradient(180deg,#f9e3ae,#d8a856);color:#2b1a0d;border-color:transparent;opacity:1;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+.tcard{background:rgba(232,207,154,.04);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
+.tcard:hover{transform:translateY(-4px);border-color:rgba(232,207,154,.34)}
+.tcard[hidden]{display:none}
+.tmedia{position:relative;display:block;width:100%;aspect-ratio:4/3;padding:0;border:0;background:#140c07;cursor:pointer;overflow:hidden;text-decoration:none;color:inherit}
+.tmedia img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.tcard:hover .tmedia img{transform:scale(1.04)}
+.tmedia::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,5,3,.05) 45%,rgba(10,5,3,.72));pointer-events:none}
+.tbadge{position:absolute;top:12px;left:12px;z-index:2;font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;background:rgba(10,5,3,.72);border:1px solid rgba(232,207,154,.3);color:#f0d9a4;border-radius:999px;padding:.4em .8em;backdrop-filter:blur(6px)}
+.tplay{position:absolute;left:14px;bottom:12px;z-index:2;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#f9e3ae;display:inline-flex;align-items:center;gap:6px}
+.tplay::before{content:"";width:0;height:0;border-left:7px solid #f9e3ae;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.tbody{padding:18px 20px 20px;display:flex;flex-direction:column;gap:7px;flex:1}
+.thead{display:flex;align-items:baseline;gap:12px;justify-content:space-between}
+.tbody h3{font-size:1.08rem;font-weight:400;line-height:1.3}
+.tprice{font-size:.72rem;opacity:.55;letter-spacing:.04em;white-space:nowrap}
+.tprice b{font-weight:400;color:#f0d9a4}
+.tbody p{font-size:.85rem;opacity:.68}
+.tinc{font-size:.72rem!important;opacity:.42!important;letter-spacing:.04em;margin-top:2px}
+.tfoot{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:flex-end;margin-top:auto;padding-top:12px}
+.tfoot .btn-line,.tfoot .btn-gold{flex:0 1 auto}
+.catalog-note{margin-top:26px;font-size:.86rem;opacity:.6}
+.catalog-note a{color:#f0d9a4}
+
+/* ---------- pedido ---------- */
+.order-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:26px;align-items:start}
+form.pedido{background:rgba(232,207,154,.035);border:1px solid var(--line);border-radius:18px;padding:28px}
+form.pedido h2{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:400;line-height:1.2}
+form.pedido .intro{font-size:.88rem;opacity:.68;margin:8px 0 22px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{margin-bottom:14px}
+label,.lbl{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;opacity:.62}
+input,select,textarea{width:100%;background:rgba(10,5,3,.55);border:1px solid rgba(232,207,154,.22);border-radius:10px;padding:.8em .9em;color:var(--gold);font-family:inherit;font-size:.92rem;color-scheme:dark}
+textarea{resize:vertical;min-height:104px;line-height:1.5}
+input::placeholder,textarea::placeholder{color:rgba(232,207,154,.35)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(249,227,174,.65);box-shadow:0 0 0 3px rgba(249,227,174,.08)}
+select option{background:#140c07;color:var(--gold)}
+form.pedido .btn-gold{width:100%;margin-top:6px;padding:.9em 1.2em;font-size:.95rem}
+.form-note{font-size:.74rem;opacity:.5;margin-top:12px;text-align:center;line-height:1.5}
+.estado{display:none;margin-top:14px;padding:12px 14px;border:1px solid rgba(249,227,174,.3);border-radius:10px;background:rgba(249,227,174,.06);font-size:.83rem;line-height:1.5}
+.estado.on{display:block}
+.estado a{color:#f9e3ae}
+.precio-nota{font-size:.74rem;opacity:.48;margin-top:4px}
+
+.summary{position:sticky;top:84px;background:linear-gradient(180deg,rgba(232,207,154,.07),rgba(232,207,154,.025));border:1px solid rgba(232,207,154,.24);border-radius:18px;padding:22px}
+.sum-media{position:relative;height:190px;border-radius:10px;overflow:hidden;margin:6px 0 16px;border:1px solid rgba(232,207,154,.16)}
+.sum-media img{width:100%;height:100%;object-fit:cover}
+.sum-head{display:flex;align-items:baseline;gap:10px;justify-content:space-between;margin-bottom:12px}
+.sum-head h3{font-size:1.02rem;font-weight:400;line-height:1.3}
+.sum-head span{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-soft);white-space:nowrap}
+.summary dl{display:grid;gap:9px;font-size:.85rem}
+.summary dl div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(232,207,154,.14);padding-bottom:8px}
+.summary dt{opacity:.6}
+.summary dd{text-align:right;max-width:62%}
+.summary .total{font-size:1.4rem;color:#f9e3ae;padding-top:12px;border:0;margin-top:2px;align-items:center}
+.summary .total dt{opacity:.7;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
+.summary .btn-line{width:100%;margin-top:16px}
+.sum-note{font-size:.72rem;opacity:.5;margin-top:12px;line-height:1.5}
+
+/* ---------- pasos ---------- */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;counter-reset:p}
+.step{position:relative;padding:26px 22px 22px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(232,207,154,.05),transparent)}
+.step::before{counter-increment:p;content:"0" counter(p);font-size:2rem;color:rgba(232,207,154,.18);line-height:1;display:block;margin-bottom:10px}
+.step h4{font-weight:400;font-size:1.02rem;margin-bottom:6px}
+.step p{font-size:.85rem;opacity:.68}
+
+/* ---------- incluye ---------- */
+.incluye{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:6px}
+.inc{padding:20px;border:1px solid var(--line);border-radius:14px;background:rgba(232,207,154,.03)}
+.inc b{display:block;font-weight:400;font-size:.98rem;margin-bottom:4px}
+.inc span{font-size:.82rem;opacity:.64;line-height:1.5}
+
+/* ---------- pago ---------- */
+.pago-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:6px}
+.pago-grid.unico{grid-template-columns:1fr;max-width:620px}
+.pago{padding:20px;border:1px solid var(--line);border-radius:14px;background:rgba(232,207,154,.03)}
+.pago b{display:block;font-weight:400;font-size:.98rem;margin-bottom:4px}
+.pago span{font-size:.8rem;opacity:.62;line-height:1.5}
+.pago .ico{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid rgba(232,207,154,.3);font-size:.7rem;color:#f9e3ae;margin-bottom:10px}
+.aviso-pago{margin-top:18px;padding:16px 18px;border-left:2px solid rgba(249,227,174,.5);background:rgba(249,227,174,.05);font-size:.85rem;opacity:.8;border-radius:0 10px 10px 0}
+
+/* ---------- negocio en crecimiento ---------- */
+.crecimiento{padding:0 0 10px}
+.crec{border:1px solid rgba(232,207,154,.22);border-radius:20px;padding:clamp(26px,4vw,40px);
+  background:radial-gradient(ellipse 80% 140% at 12% 120%,rgba(255,150,60,.14),transparent 62%),rgba(232,207,154,.03)}
+.crec h2{font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:400;line-height:1.2}
+.crec p{margin:10px 0 18px;font-size:.9rem;opacity:.72;max-width:44em}
+
+/* ---------- faq ---------- */
+.faq{display:grid;gap:10px;max-width:840px}
+details{border:1px solid var(--line);border-radius:12px;background:rgba(232,207,154,.03);padding:0 18px}
+summary{cursor:pointer;list-style:none;padding:17px 30px 17px 0;position:relative;font-size:.95rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:2px;top:50%;transform:translateY(-50%);color:#f0d9a4;font-size:1.1rem}
+details[open] summary::after{content:"–"}
+details p{padding:0 0 18px;font-size:.87rem;opacity:.7;max-width:62em}
+
+/* ---------- cierre ---------- */
+.final{padding:90px 0 104px;text-align:center}
+.final .box{position:relative;border:1px solid rgba(232,207,154,.24);border-radius:24px;padding:clamp(34px,6vw,62px) 24px;
+  background:radial-gradient(ellipse 70% 120% at 50% 120%,rgba(255,150,60,.16),transparent 65%),rgba(232,207,154,.03)}
+.final h2{font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:400;line-height:1.2;max-width:22em;margin:0 auto}
+.final p{margin:16px auto 0;opacity:.72;max-width:36em;font-size:.94rem}
+.final .cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
+.final small{display:block;margin-top:20px;font-size:.73rem;opacity:.45;letter-spacing:.06em}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:30px 0 40px;font-size:.79rem;opacity:.6}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center;justify-content:space-between}
+footer a{text-decoration:none;border-bottom:1px solid rgba(232,207,154,.25)}
+footer .fine{width:100%;font-size:.71rem;opacity:.6}
+
+@media(max-width:900px){
+  .hero{padding:48px 0 22px}
+  h1{font-size:clamp(1.9rem,7vw,2.6rem)}
+  section{padding:54px 0}
+  .order-grid{grid-template-columns:1fr}
+  .summary{position:static;order:2}
+}
+@media(max-width:560px){
+  .nav .wrap{gap:10px;height:auto;padding-top:11px;padding-bottom:11px}
+  .brand{font-size:.88rem;line-height:1.2;white-space:normal}
+  .nav nav a:not(.nav-cta){display:none}
+  .nav-cta{font-size:.75rem!important;padding:.5em .9em!important}
+  .row{grid-template-columns:1fr;gap:12px}
+  form.pedido{padding:20px}
+  .grid{grid-template-columns:1fr}
+  .final{padding:68px 0 82px}
+  .tfoot{justify-content:stretch}
+  .tfoot .btn-line,.tfoot .btn-gold{flex:1}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body id="top">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Soul Digital Design <b>· plantillas digitales</b></a>
+    <nav>
+      <a href="#plantillas">Plantillas</a>
+      <a href="#pedido">Pedido</a>
+      <a href="#pago">Pago</a>
+      <a href="#faq">Preguntas</a>
+      <a class="btn-gold nav-cta" href="#pedido">Pedir la mía</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="copy">
+        <span class="kicker">4 plantillas · una de cada tipo</span>
+        <h1>Elige la plantilla. <em>El contenido lo pones tú.</em></h1>
+        <p class="lead">Una carta que se escribe sola, un cumpleaños con fotos, un libro de familia y un espacio para tu propia idea. Todo se personaliza con tus textos, tus fotos y tus colores, y se entrega listo para abrir con doble clic.</p>
+        <div class="cta">
+          <a class="btn-gold" href="#plantillas">Ver plantillas</a>
+          <a class="btn-ghost" href="demo/libro-familia.html" target="_blank" rel="noopener">Abrir una demo</a>
+        </div>
+        <ul class="mini">
+          <li>1000 CUP por plantilla</li>
+          <li>Se ve en celular</li>
+          <li>Entrega en 24–48 h</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="plantillas">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Catálogo</span>
+        <h2>Una plantilla por tipo. La que elijas, personalizada.</h2>
+        <p>Nada de veinte variantes de lo mismo: aquí hay una buena de cada cosa. Ábrela, pruébala y si te sirve, la adapto con tu historia.</p>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p class="catalog-note">Todas a <b>1000 CUP</b>. Las tres primeras ya están listas; la cuarta se hace contigo: <a href="#pedido">cuéntame tu idea</a>.</p>
+    </div>
+  </section>
+
+  <section id="crecimiento" class="crecimiento">
+    <div class="wrap">
+      <div class="crec">
+        <span class="eyebrow">Negocio en crecimiento</span>
+        <h2>Esto recién empieza.</h2>
+        <p>Soul Digital Design es un negocio en crecimiento: la cantidad y variedad de plantillas irá cambiando con el tiempo. Las que ves hoy son las disponibles ahora. Si buscas algo que no está, pregúntame: puede ser la próxima en entrar al catálogo.</p>
+        <a class="btn-line" href="#pedido">Contarme tu idea</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="pedido">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Pedido</span>
+        <h2>Arma tu pedido en un minuto</h2>
+        <p>No pagas nada aquí. Al enviar se abre WhatsApp con el pedido escrito; te confirmo el precio final, te paso los datos de pago y te mando el borrador.</p>
+      </div>
+      <div class="order-grid">
+        <form class="pedido" id="formPedido" novalidate>
+          <h2>Tu plantilla</h2>
+          <p class="intro">Con lo que pongas aquí ya puedo empezar. Pide con al menos <b>una semana de anticipación</b> para coordinar todo con calma.</p>
+
+          <div class="row">
+            <div class="field">
+              <label for="fPlantilla">Plantilla</label>
+              <select id="fPlantilla" name="plantilla"></select>
+            </div>
+            <div class="field">
+              <label for="fUso">Para qué es *</label>
+              <input id="fUso" name="uso" placeholder="Ej. cumpleaños de mi mamá" required>
+            </div>
+          </div>
+          <p class="precio-nota" style="margin:-6px 0 16px">Precio único: <b>1000 CUP</b> por plantilla, sin importar el diseño. Incluye dos rondas de ajustes.</p>
+
+          <div class="row">
+            <div class="field">
+              <label for="fPara">Para quién o para qué negocio *</label>
+              <input id="fPara" name="para" placeholder="Ej. Ana / Cafetería Saber Criollo" required>
+            </div>
+            <div class="field">
+              <label for="fFecha">Fecha de entrega</label>
+              <input id="fFecha" type="date" name="fecha">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="fNombre">Tu nombre</label>
+              <input id="fNombre" name="nombre" placeholder="Para saber cómo llamarte">
+            </div>
+            <div class="field">
+              <label for="fContacto">Tu WhatsApp o correo *</label>
+              <input id="fContacto" name="contacto" placeholder="Para responderte" required>
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="fPago">Forma de pago</label>
+            <input id="fPago" name="pago" value="Transferencia (CUP)" readonly>
+            <p class="precio-nota">Solo transferencia. Los datos te los envío por WhatsApp al confirmar el pedido.</p>
+          </div>
+
+          <div class="field full">
+            <label for="fDetalles">Qué quieres que diga o muestre *</label>
+            <textarea id="fDetalles" name="detalles" placeholder="Ej. los nombres, la fecha, una frase, los platos del menú, los horarios, los recuerdos que no quieres que falten…" required></textarea>
+          </div>
+
+          <button class="btn-gold" type="submit">Enviar pedido por WhatsApp</button>
+          <p class="form-note">Se abre tu WhatsApp con el pedido escrito. Si no tienes WhatsApp en este dispositivo, usa “Copiar pedido”.</p>
+          <div class="estado" id="estado" role="status"></div>
+        </form>
+
+        <aside class="summary" aria-live="polite">
+          <span class="eyebrow">Tu pedido</span>
+          <div class="sum-media"><img id="sumImg" src="img/cartas.jpg" alt=""></div>
+          <div class="sum-head"><h3 id="sumNombre">Cartas que se escriben solas</h3><span id="sumCat">Cartas</span></div>
+          <dl>
+            <div><dt>Entrega</dt><dd id="sumEntrega">24–48 h</dd></div>
+            <div><dt>Incluye</dt><dd id="sumIncluye">—</dd></div>
+            <div class="total"><dt>Precio</dt><dd id="sumTotal">1000 CUP</dd></div>
+          </dl>
+          <button class="btn-line" type="button" id="copiar">Copiar pedido</button>
+          <p class="sum-note">1000 CUP por plantilla, en pesos cubanos. Incluye dos rondas de ajustes. El pago es por transferencia.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="como">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>Tú pones la historia. Yo la monto.</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><h4>Eliges y pides</h4><p>Escoges la plantilla, me cuentas para qué es y qué quieres que diga. Todo en el formulario.</p></div>
+        <div class="step"><h4>Te mando el borrador</h4><p>En el día tienes la versión con tus textos y fotos. Me dices qué cambiar y lo ajusto.</p></div>
+        <div class="step"><h4>Recibes tu archivo</h4><p>Link listo para enviar, archivo HTML de respaldo y un video corto mostrando cómo se ve.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="incluye">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Qué incluye</span>
+        <h2>No es una imagen. Es algo que se abre y se usa.</h2>
+      </div>
+      <div class="incluye">
+        <div class="inc"><b>Archivo HTML</b><span>Se abre con doble clic en cualquier navegador. Sin instalar nada y sin depender de una plataforma.</span></div>
+        <div class="inc"><b>Link para compartir</b><span>Un enlace que puedes mandar por WhatsApp y se abre en el celular de la otra persona.</span></div>
+        <div class="inc"><b>Diseño adaptable</b><span>Probado en iPhone y Android. Los textos, fotos y colores se ajustan a tu contenido.</span></div>
+        <div class="inc"><b>Dos rondas de ajustes</b><span>Cambios de texto, fotos, fechas y detalles hasta que quede como lo imaginas.</span></div>
+        <div class="inc"><b>Video de respaldo</b><span>Un video corto con el resultado final, por si el link falla o quieres enseñarlo rápido.</span></div>
+        <div class="inc"><b>Música y voz</b><span>Puedo agregar música de fondo o un mensaje de voz personalizado.</span></div>
+        <div class="inc"><b>Uso para tu proyecto</b><span>La plantilla queda para ti. No se revende ni se comparte con otros clientes.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pago">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Pago y entrega</span>
+        <h2>Pago por transferencia</h2>
+        <p>Al confirmar el pedido te envío los datos por WhatsApp. Se reserva la fecha con el 50 %; el resto, cuando apruebas el borrador.</p>
+      </div>
+      <div class="pago-grid unico">
+        <div class="pago">
+          <span class="ico">↔</span>
+          <b>Transferencia</b>
+          <span>Pago en pesos cubanos (CUP). Te paso los datos de la cuenta por WhatsApp al confirmar el pedido.</span>
+        </div>
+      </div>
+      <p class="aviso-pago"><b>Entrega:</b> link para WhatsApp, archivo HTML de respaldo y un video de 15 segundos con el resultado final. Si el link fallara, el recuerdo queda igual.</p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Antes de pedir</span>
+        <h2>Lo que todos preguntan</h2>
+      </div>
+      <div class="faq">
+        <details><summary>¿Cómo recibo mi plantilla?</summary><p>Te mando un link privado que se abre en cualquier celular, sin instalar nada. Además te doy el archivo HTML y un video de respaldo. Si quieres publicarla como sitio web, también te explico cómo subirla gratis.</p></details>
+        <details><summary>¿Puedo cambiar textos, fotos y colores?</summary><p>Sí, para eso es. La plantilla define la estructura y el estilo; el contenido se escribe con tus nombres, tu historia, tus fotos y tus colores. Puedes pedirme cambios hasta aprobar el borrador.</p></details>
+        <details><summary>¿Se ve bien en iPhone y en Android?</summary><p>Sí, todas están probadas en ambos y se adaptan a la pantalla. Algunas necesitan un toque para empezar (encender la vela, tocar la foto, abrir el libro).</p></details>
+        <details><summary>¿Se le puede poner música o voz?</summary><p>Sí. Puedo agregar música de fondo o un mensaje de voz grabado por ti.</p></details>
+        <details><summary>¿Cómo la envío a la otra persona?</summary><p>Te mando el link por WhatsApp y tú lo reenvías a quien quieras. También puedes enviar el archivo HTML o el video de respaldo.</p></details>
+        <details><summary>¿Cuánto cuesta?</summary><p>1000 CUP por plantilla, en pesos cubanos. Es un precio único: no cambia según el diseño ni la cantidad de texto. Incluye dos rondas de ajustes.</p></details>
+        <details><summary>¿Con cuánta anticipación debo pedir?</summary><p>Se recomienda hacer el pedido con al menos <b>una semana de anticipación</b> para coordinar con calma los textos, las fotos y los detalles. Si es para una fecha exacta, avísame con tiempo.</p></details>
+        <details><summary>¿Cómo pago?</summary><p>Solo por transferencia, en CUP. Te envío los datos por WhatsApp al confirmar el pedido. Con el 50 % reservo la fecha y empiezo; el resto lo pagas cuando apruebas el borrador.</p></details>
+        <details><summary>¿El catálogo va a cambiar?</summary><p>Sí. Es un negocio en crecimiento: con el tiempo irán entrando nuevas plantillas y variantes. Si hoy no ves lo que buscas, escríbeme y lo vemos.</p></details>
+        <details><summary>¿Puedo pedir algo que no está en el catálogo?</summary><p>Sí. Cuéntame qué necesitas y te digo si conviene adaptar una plantilla o hacer algo desde cero. El precio se cotiza según el trabajo.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <div class="box">
+        <span class="eyebrow">Último paso</span>
+        <h2>¿Cuál es la tuya y qué quieres que diga?</h2>
+        <p>Elige una plantilla, escríbeme esa respuesta y en el día tienes el borrador. No necesitas tener las palabras: para eso estoy.</p>
+        <div class="cta">
+          <a class="btn-gold" href="#pedido">Armar mi pedido</a>
+          <a class="btn-ghost" data-wa href="#" target="_blank" rel="noopener">Escribirme directo</a>
+        </div>
+        <small>Respondo en el día · Cupos limitados por semana</small>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN · cambia aquí sin tocar el resto
+   ============================================================ */
+const CONFIG = {
+  marca: "Soul Digital Design",
+  whatsapp: "5351321718",              // sin +, sin espacios
+  moneda: "CUP",                       // pesos cubanos
+  entrega: "24–48 h",
+  mensajeGeneral: "Hola, vi las plantillas y quiero una personalizada. Me interesa: ",
+  plantillas: [
+    {
+      id: "cartas", nombre: "Cartas que se escriben solas", cat: "cartas", catNombre: "Cartas",
+      precio: 1000, entrega: "24–48 h", img: "img/cartas.jpg", demo: "cartas/demo-aniversario.html", demoLabel: "Abrir plantilla",
+      desc: "Una carta que se escribe sola a la luz de una vela. Al final se sopla y se pide un deseo.",
+      incluye: "6 paletas · sonido · vela interactiva"
+    },
+    {
+      id: "cumple", nombre: "Feliz cumpleaños", cat: "cumple", catNombre: "Cumpleaños",
+      precio: 1000, entrega: "24–48 h", img: "img/cumpleanos.jpg", demo: "demo/cumpleanos.html",
+      desc: "Portada con foto, mensaje y postales que se abren una a una. Para el día que todos recuerdan.",
+      incluye: "Fotos · música · postales"
+    },
+    {
+      id: "libro", nombre: "El Libro de la Familia", cat: "familia", catNombre: "Familia",
+      precio: 1000, entrega: "24–48 h", img: "img/libro-familia.jpg", demo: "demo/libro-familia.html",
+      desc: "Un libro con páginas que se pasan, índice y una última página para escribir. Para regalar historia.",
+      incluye: "Páginas · índice · dedicatoria"
+    },
+    {
+      id: "otra", nombre: "Tu propia idea", cat: "otras", catNombre: "A medida",
+      precio: 1000, entrega: "a coordinar", img: "img/otra.jpg", demo: "",
+      desc: "¿Ninguna encaja del todo? Cuéntame qué necesitas y te propongo cómo hacerlo, desde cero o partiendo de una de las tres.",
+      incluye: "A tu medida · 2 rondas de ajustes"
+    }
+  ]
+};
+
+/* ============================================================ */
+const $ = s => document.querySelector(s);
+const wa = texto => "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(texto);
+const porId = id => CONFIG.plantillas.find(p => p.id === id) || CONFIG.plantillas[0];
+const precio = n => (n === null || n === undefined || n === "") ? "A cotizar" : n + " " + CONFIG.moneda;
+
+/* ---------- galería ---------- */
+const grid = $("#grid");
+CONFIG.plantillas.forEach(p => {
+  const card = document.createElement("article");
+  card.className = "tcard";
+  card.dataset.cat = p.cat;
+  const media = p.demo
+    ? '<a class="tmedia" href="' + p.demo + '" target="_blank" rel="noopener" aria-label="Abrir ' + p.nombre + '">'
+        + '<img src="' + p.img + '" alt="Vista previa de ' + p.nombre + '">'
+        + '<span class="tbadge">' + p.catNombre + '</span>'
+        + '<span class="tplay">' + (p.demoLabel || "Abrir plantilla") + '</span>'
+      + '</a>'
+    : '<button class="tmedia" type="button" data-elegir="' + p.id + '" aria-label="Pedir ' + p.nombre + '">'
+        + '<img src="' + p.img + '" alt="Vista previa de ' + p.nombre + '">'
+        + '<span class="tbadge">' + p.catNombre + '</span>'
+        + '<span class="tplay">Cuéntame tu idea</span>'
+      + '</button>';
+
+  const precioTxt = p.precio ? '<b>' + precio(p.precio) + '</b>' : '<b>a cotizar</b>';
+  const acciones = p.demo
+    ? '<a class="btn-line" href="' + p.demo + '" target="_blank" rel="noopener">' + (p.demoLabel || "Abrir plantilla") + '</a>'
+      + '<button class="btn-gold btn-sm" type="button" data-elegir="' + p.id + '">Quiero esta</button>'
+    : '<button class="btn-gold btn-sm" type="button" data-elegir="' + p.id + '" style="flex:1">Cuéntame tu idea</button>';
+
+  card.innerHTML = media
+    + '<div class="tbody">'
+      + '<div class="thead"><h3>' + p.nombre + '</h3><span class="tprice">' + precioTxt + '</span></div>'
+      + '<p>' + p.desc + '</p>'
+      + '<p class="tinc">' + p.incluye + '</p>'
+      + '<div class="tfoot">' + acciones + '</div>'
+    + '</div>';
+  grid.appendChild(card);
+});
+
+/* ---------- selects ---------- */
+const selPlantilla = $("#fPlantilla");
+CONFIG.plantillas.forEach(p => {
+  const o = document.createElement("option");
+  o.value = p.id;
+  o.textContent = p.nombre;
+  selPlantilla.appendChild(o);
+});
+
+/* ---------- resumen ---------- */
+function actualizarResumen() {
+  const p = porId(selPlantilla.value);
+  $("#sumImg").src = p.img;
+  $("#sumImg").alt = "Vista previa de " + p.nombre;
+  $("#sumNombre").textContent = p.nombre;
+  $("#sumCat").textContent = p.catNombre;
+  $("#sumEntrega").textContent = p.entrega || CONFIG.entrega;
+  $("#sumIncluye").textContent = p.incluye;
+  $("#sumTotal").textContent = precio(p.precio);
+  document.querySelectorAll("[data-wa]").forEach(a => {
+    a.href = wa(CONFIG.mensajeGeneral + p.nombre);
+    a.target = "_blank";
+    a.rel = "noopener";
+  });
+}
+selPlantilla.addEventListener("change", actualizarResumen);
+
+/* ---------- elegir desde la galería ---------- */
+function elegir(id) {
+  selPlantilla.value = id;
+  actualizarResumen();
+  document.getElementById("pedido").scrollIntoView({ behavior: "smooth", block: "start" });
+  setTimeout(() => $("#fUso").focus({ preventScroll: true }), 520);
+}
+
+document.addEventListener("click", e => {
+  const elegirBtn = e.target.closest("[data-elegir]");
+  if (elegirBtn) elegir(elegirBtn.dataset.elegir);
+});
+
+/* ---------- armar mensaje ---------- */
+function armarMensaje() {
+  const p = porId(selPlantilla.value);
+  const v = id => document.getElementById(id).value.trim();
+  const lineas = [
+    "Hola, quiero una plantilla personalizada ✨",
+    "",
+    "Plantilla: " + p.nombre + " (" + p.catNombre + ") · " + precio(p.precio),
+    "Para: " + (v("fPara") || "—"),
+    "Uso: " + (v("fUso") || "—"),
+    "Fecha de entrega: " + (v("fFecha") || "a coordinar"),
+    "Forma de pago: " + v("fPago")
+  ];
+  if (v("fDetalles")) lineas.push("", "Detalles:", v("fDetalles"));
+  if (v("fNombre")) lineas.push("", "Mi nombre: " + v("fNombre"));
+  if (v("fContacto")) lineas.push("Mi contacto: " + v("fContacto"));
+  return lineas.join("\n");
+}
+
+$("#formPedido").addEventListener("submit", e => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  if (!form.checkValidity()) { form.reportValidity(); return; }
+  const url = wa(armarMensaje());
+  const estado = $("#estado");
+  estado.innerHTML = 'Se abrió WhatsApp con tu pedido. Si no pasó nada, <a href="' + url + '" target="_blank" rel="noopener">toca aquí para abrirlo</a>.';
+  estado.classList.add("on");
+  window.open(url, "_blank");
+});
+
+$("#copiar").addEventListener("click", async () => {
+  const btn = $("#copiar");
+  const texto = armarMensaje();
+  try {
+    await navigator.clipboard.writeText(texto);
+    btn.textContent = "Copiado ✓";
+  } catch (err) {
+    const ta = document.createElement("textarea");
+    ta.value = texto;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    btn.textContent = "Copiado ✓";
+  }
+  setTimeout(() => { btn.textContent = "Copiar pedido"; }, 2200);
+});
+
+/* ---------- inicial ---------- */
+actualizarResumen();
+</script>
+</body>
+</html>

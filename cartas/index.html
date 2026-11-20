@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cartas que se escriben solas · Plantillas personalizables</title>
+<meta name="description" content="Elige una plantilla, cuéntame su historia y recibe una carta digital que se escribe sola: vela, letra manuscrita y sonido. Entrega en 24 h.">
+<meta property="og:title" content="Cartas que se escriben solas · Plantillas personalizables">
+<meta property="og:description" content="Elige la plantilla, cuéntame la historia y recibe tu carta en 24 h.">
+<meta property="og:type" content="website">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0503;--gold:#e8cf9a;--gold-soft:#c9ae78;--paper:#f1e2bf;--ink:#2b1a0d;
+  --line:rgba(232,207,154,.16);--warm:#ff9a3c;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--gold);font-family:Georgia,'Palatino Linotype',serif;line-height:1.62;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 85% 55% at 50% 112%,rgba(255,150,60,.26),rgba(150,70,20,.10) 45%,transparent 72%)}
+a{color:inherit}
+.hand{font-family:'Segoe Script','Lucida Handwriting','Bradley Hand','Brush Script MT',cursive}
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 22px}
+.eyebrow{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);display:block;margin-bottom:12px}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:rgba(10,5,3,.78);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:18px;height:64px}
+.brand{font-size:1.02rem;letter-spacing:.02em;white-space:nowrap}
+.brand b{font-weight:400;color:#f6e4b6}
+.nav nav{margin-left:auto;display:flex;align-items:center;gap:22px;font-size:.85rem}
+.nav nav a{text-decoration:none;opacity:.72}
+.nav nav a:hover{opacity:1}
+
+/* ---------- botones ---------- */
+.btn-gold,.btn-ghost,.btn-line{display:inline-block;text-decoration:none;border-radius:999px;font-size:.9rem;padding:.72em 1.35em;transition:transform .15s,box-shadow .2s,background .2s;cursor:pointer;border:0;font-family:inherit;text-align:center}
+.btn-gold{background:linear-gradient(180deg,#f9e3ae,#d8a856);color:#2b1a0d;font-weight:700;box-shadow:0 10px 26px rgba(216,168,86,.22)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(216,168,86,.32)}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid rgba(232,207,154,.32)}
+.btn-ghost:hover{background:rgba(232,207,154,.08)}
+.btn-line{background:rgba(30,15,6,.6);border:1px solid rgba(232,207,154,.28);color:var(--gold);font-size:.82rem;padding:.6em 1.05em}
+.btn-line:hover{background:rgba(232,207,154,.1)}
+.btn-sm{font-size:.8rem;padding:.6em 1.05em}
+.nav-cta{padding:.55em 1.1em!important;font-size:.8rem!important}
+
+/* ---------- hero ---------- */
+.hero{padding:62px 0 34px}
+.hero .wrap{display:grid;grid-template-columns:1.06fr .94fr;gap:48px;align-items:center}
+.kicker{display:inline-block;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);border:1px solid var(--line);border-radius:999px;padding:.5em 1em;margin-bottom:20px}
+h1{font-size:clamp(2rem,4.3vw,3rem);line-height:1.14;font-weight:400;letter-spacing:-.01em}
+h1 em{font-style:normal;color:#f9e3ae;text-shadow:0 0 34px rgba(255,160,60,.35)}
+.lead{margin-top:18px;font-size:1rem;opacity:.84;max-width:33em}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.mini{list-style:none;display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:24px;font-size:.79rem;opacity:.7}
+.mini li::before{content:"✓";color:#f9e3ae;margin-right:.45em}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:12px}
+.phone{position:relative;width:min(310px,82vw);aspect-ratio:9/19.2;padding:10px;border-radius:46px;
+  background:linear-gradient(160deg,#2b2019,#100a07 60%);
+  box-shadow:0 40px 90px rgba(0,0,0,.65),0 0 0 1px rgba(232,207,154,.16),0 0 100px rgba(255,150,60,.16)}
+.phone::before{content:"";position:absolute;top:19px;left:50%;transform:translateX(-50%);width:84px;height:19px;background:#080503;border-radius:0 0 13px 13px;z-index:3}
+.phone iframe{display:block;width:100%;height:100%;border:0;border-radius:36px;background:#0a0503}
+.play{display:none}
+.phone-cap{font-size:.75rem;opacity:.55;text-align:center;max-width:26em}
+.phone-cap b{font-weight:400;color:#f0d9a4}
+
+/* ---------- secciones ---------- */
+section{padding:70px 0;scroll-margin-top:78px}
+.sec-head{max-width:46em;margin-bottom:32px}
+.sec-head h2{font-size:clamp(1.6rem,3vw,2.25rem);font-weight:400;line-height:1.2}
+.sec-head p{margin-top:12px;opacity:.72}
+
+/* ---------- filtros + galería ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{background:transparent;border:1px solid rgba(232,207,154,.24);color:var(--gold);border-radius:999px;padding:.5em 1em;font:inherit;font-size:.8rem;cursor:pointer;opacity:.75;transition:.15s}
+.chip:hover{opacity:1;background:rgba(232,207,154,.07)}
+.chip.on{background:linear-gradient(180deg,#f9e3ae,#d8a856);color:#2b1a0d;border-color:transparent;opacity:1;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.tcard{background:rgba(232,207,154,.04);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
+.tcard:hover{transform:translateY(-4px);border-color:rgba(232,207,154,.34)}
+.tcard[hidden]{display:none}
+.tprev{position:relative;height:232px;overflow:hidden;padding:20px 20px 48px;box-shadow:inset 0 0 40px rgba(0,0,0,.12)}
+.ttag{font-family:Georgia,serif;font-size:.57rem;letter-spacing:.16em;text-transform:uppercase;opacity:.5}
+.tprev .hand{font-size:1.02rem;line-height:1.45;margin-top:8px}
+.tprev .tline{font-size:.9rem;line-height:1.5;opacity:.82;margin-top:6px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tcandle{position:absolute;right:16px;bottom:14px;width:18px;height:30px;border-radius:3px;box-shadow:0 4px 10px rgba(0,0,0,.25)}
+.tcandle::before{content:"";position:absolute;left:7px;top:-9px;width:4px;height:9px;background:#1b0f08;border-radius:2px}
+.tcandle::after{content:"";position:absolute;left:4px;top:-23px;width:9px;height:16px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:radial-gradient(circle at 50% 70%,#fffbe0,#ffd36b 45%,#ff8f26 75%,rgba(255,90,20,0));filter:drop-shadow(0 0 8px rgba(255,170,60,.9))}
+.tbody{padding:18px 20px 20px;display:flex;flex-direction:column;gap:7px;flex:1}
+.tbody h3{font-size:1.1rem;font-weight:400}
+.tbody p{font-size:.85rem;opacity:.68;flex:1}
+.tfoot{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-top:10px}
+.desde{font-size:.78rem;opacity:.55;letter-spacing:.04em}
+.tbtns{display:flex;gap:8px}
+
+/* ---------- pedido ---------- */
+.order-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:26px;align-items:start}
+form.pedido{background:rgba(232,207,154,.035);border:1px solid var(--line);border-radius:18px;padding:28px}
+form.pedido h2{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:400;line-height:1.2}
+form.pedido .intro{font-size:.88rem;opacity:.68;margin:8px 0 22px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{margin-bottom:14px}
+label,.lbl{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;opacity:.62}
+input,select,textarea{width:100%;background:rgba(10,5,3,.55);border:1px solid rgba(232,207,154,.22);border-radius:10px;padding:.8em .9em;color:var(--gold);font-family:inherit;font-size:.92rem;color-scheme:dark}
+textarea{resize:vertical;min-height:96px;line-height:1.5}
+input::placeholder,textarea::placeholder{color:rgba(232,207,154,.35)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(249,227,174,.65);box-shadow:0 0 0 3px rgba(249,227,174,.08)}
+select option{background:#140c07;color:var(--gold)}
+form.pedido .btn-gold{width:100%;margin-top:6px;padding:.9em 1.2em;font-size:.95rem}
+.form-note{font-size:.74rem;opacity:.5;margin-top:12px;text-align:center;line-height:1.5}
+.estado{display:none;margin-top:14px;padding:12px 14px;border:1px solid rgba(249,227,174,.3);border-radius:10px;background:rgba(249,227,174,.06);font-size:.83rem;line-height:1.5}
+.estado.on{display:block}
+.estado a{color:#f9e3ae}
+
+.summary{position:sticky;top:84px;background:linear-gradient(180deg,rgba(232,207,154,.07),rgba(232,207,154,.025));border:1px solid rgba(232,207,154,.24);border-radius:18px;padding:22px}
+.sum-prev{height:158px;border-radius:10px;padding:16px 16px 40px;overflow:hidden;position:relative;margin:6px 0 18px;box-shadow:inset 0 0 30px rgba(0,0,0,.12)}
+.sum-prev .ttag{font-size:.55rem}
+.sum-prev .hand{font-size:.98rem;line-height:1.4;margin-top:6px}
+.sum-prev .tline{font-size:.82rem;opacity:.8;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sum-prev .tcandle{right:14px;bottom:12px;transform:scale(.9)}
+.summary dl{display:grid;gap:9px;font-size:.85rem}
+.summary dl div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(232,207,154,.14);padding-bottom:8px}
+.summary dt{opacity:.6}
+.summary dd{text-align:right}
+.summary .total{font-size:1.5rem;color:#f9e3ae;padding-top:12px;border:0;margin-top:2px;align-items:center}
+.summary .total dt{opacity:.7;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
+.summary .btn-line{width:100%;margin-top:16px}
+.sum-note{font-size:.72rem;opacity:.5;margin-top:12px;line-height:1.5}
+
+/* ---------- pasos ---------- */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;counter-reset:p}
+.step{position:relative;padding:26px 22px 22px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(232,207,154,.05),transparent)}
+.step::before{counter-increment:p;content:"0" counter(p);font-size:2rem;color:rgba(232,207,154,.18);line-height:1;display:block;margin-bottom:10px}
+.step h4{font-weight:400;font-size:1.02rem;margin-bottom:6px}
+.step p{font-size:.85rem;opacity:.68}
+
+/* ---------- precios ---------- */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:18px;align-items:stretch}
+.plan{position:relative;display:flex;flex-direction:column;padding:30px 24px 24px;border:1px solid var(--line);border-radius:18px;background:rgba(232,207,154,.035)}
+.plan.star{border-color:rgba(249,227,174,.5);background:linear-gradient(180deg,rgba(249,227,174,.1),rgba(232,207,154,.03));box-shadow:0 0 60px rgba(255,170,60,.1)}
+.stamp{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(180deg,#f9e3ae,#d8a856);color:#2b1a0d;padding:.4em .95em;border-radius:999px;white-space:nowrap;font-weight:700}
+.plan h3{font-size:1.05rem;font-weight:400}
+.plan .price{font-size:2.4rem;line-height:1;margin:14px 0 4px;color:#f9e3ae}
+.plan .price small{font-size:.42em;letter-spacing:.08em;opacity:.6;vertical-align:middle;margin-right:.2em}
+.plan .for{font-size:.79rem;opacity:.62;min-height:2.6em}
+.plan ul{list-style:none;margin:16px 0 20px;display:grid;gap:8px;font-size:.84rem}
+.plan li{display:flex;gap:9px;opacity:.82}
+.plan li::before{content:"·";color:#f9e3ae;font-weight:700}
+.plan .btn-gold,.plan .btn-ghost{margin-top:auto}
+.pay-note{margin-top:22px;font-size:.78rem;opacity:.55;text-align:center}
+
+/* ---------- pago ---------- */
+.pago-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:6px}
+.pago{padding:20px;border:1px solid var(--line);border-radius:14px;background:rgba(232,207,154,.03)}
+.pago b{display:block;font-weight:400;font-size:.98rem;margin-bottom:4px}
+.pago span{font-size:.8rem;opacity:.62;line-height:1.5}
+.pago .ico{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid rgba(232,207,154,.3);font-size:.7rem;color:#f9e3ae;margin-bottom:10px}
+.aviso-pago{margin-top:18px;padding:16px 18px;border-left:2px solid rgba(249,227,174,.5);background:rgba(249,227,174,.05);font-size:.85rem;opacity:.8;border-radius:0 10px 10px 0}
+
+/* ---------- faq ---------- */
+.faq{display:grid;gap:10px;max-width:840px}
+details{border:1px solid var(--line);border-radius:12px;background:rgba(232,207,154,.03);padding:0 18px}
+summary{cursor:pointer;list-style:none;padding:17px 30px 17px 0;position:relative;font-size:.95rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:2px;top:50%;transform:translateY(-50%);color:#f0d9a4;font-size:1.1rem}
+details[open] summary::after{content:"–"}
+details p{padding:0 0 18px;font-size:.87rem;opacity:.7;max-width:62em}
+
+/* ---------- cierre ---------- */
+.final{padding:90px 0 104px;text-align:center}
+.final .box{position:relative;border:1px solid rgba(232,207,154,.24);border-radius:24px;padding:clamp(34px,6vw,62px) 24px;
+  background:radial-gradient(ellipse 70% 120% at 50% 120%,rgba(255,150,60,.16),transparent 65%),rgba(232,207,154,.03)}
+.final h2{font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:400;line-height:1.2;max-width:20em;margin:0 auto}
+.final p{margin:16px auto 0;opacity:.72;max-width:34em;font-size:.94rem}
+.final .cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
+.final small{display:block;margin-top:20px;font-size:.73rem;opacity:.45;letter-spacing:.06em}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:30px 0 40px;font-size:.79rem;opacity:.6}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center;justify-content:space-between}
+footer a{text-decoration:none;border-bottom:1px solid rgba(232,207,154,.25)}
+footer .fine{width:100%;font-size:.71rem;opacity:.6}
+
+/* ---------- flotante ---------- */
+.floating{position:fixed;right:16px;bottom:16px;z-index:30;display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+  background:linear-gradient(180deg,#f9e3ae,#d8a856);color:#2b1a0d;font-weight:700;font-size:.82rem;padding:.65em 1em;border-radius:999px;
+  box-shadow:0 12px 30px rgba(0,0,0,.5);transition:transform .15s}
+.floating:hover{transform:translateY(-2px)}
+.floating svg{width:16px;height:16px;fill:#1f5c3c}
+
+@media(max-width:900px){
+  .hero{padding:38px 0 18px}
+  .hero .wrap{grid-template-columns:1fr;gap:36px}
+  .phone-col{order:2}
+  h1{font-size:clamp(1.9rem,7vw,2.6rem)}
+  section{padding:54px 0}
+  .order-grid{grid-template-columns:1fr}
+  .summary{position:static;order:2}
+  .phone iframe{pointer-events:none}
+  .play{display:flex;position:absolute;inset:0;z-index:4;align-items:flex-end;justify-content:center;padding-bottom:28px;text-decoration:none;border-radius:36px}
+  .play span{background:linear-gradient(180deg,#f9e3ae,#d8a856);color:#2b1a0d;font-weight:700;font-size:.8rem;padding:.7em 1.2em;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.55)}
+  .floating span{display:none}
+  .floating{padding:.8em;border-radius:50%}
+}
+@media(max-width:520px){
+  .nav .wrap{gap:10px;height:auto;padding-top:11px;padding-bottom:11px}
+  .brand{font-size:.88rem;line-height:1.2;white-space:normal}
+  .nav nav a:not(.nav-cta){display:none}
+  .nav-cta{font-size:.75rem!important;padding:.5em .9em!important}
+  .row{grid-template-columns:1fr;gap:12px}
+  form.pedido{padding:20px}
+  .grid{grid-template-columns:1fr}
+  .final{padding:68px 0 82px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../index.html" style="text-decoration:none">Cartas <b>que se escriben solas</b></a>
+    <nav>
+      <a href="../index.html">← Tienda</a>
+      <a href="#plantillas">Estilos</a>
+      <a href="#pedido">Pedido</a>
+      <a href="#precios">Precios</a>
+      <a href="#faq">Preguntas</a>
+      <a class="btn-gold nav-cta" href="#pedido">Pedir la mía</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="copy">
+        <span class="kicker">6 plantillas · Regalos digitales</span>
+        <h1>Elige la plantilla. <em>La historia la pones tú.</em></h1>
+        <p class="lead">Son cartas que se abren en el celular: la vela se enciende, la letra aparece sola con sonido y al final se sopla la vela y se pide un deseo. Tú eliges el estilo; yo la escribo con sus nombres y sus recuerdos.</p>
+        <div class="cta">
+          <a class="btn-gold" href="#pedido">Quiero la mía</a>
+          <a class="btn-ghost" href="demo-amor.html" target="_blank" rel="noopener">Probar una demo</a>
+        </div>
+        <ul class="mini">
+          <li>6 estilos</li>
+          <li>Entrega en 24 h</li>
+          <li>Borrador antes de entregar</li>
+        </ul>
+      </div>
+      <div class="phone-col">
+        <div class="phone">
+          <iframe src="demo-amor.html" title="Demo real de una carta personalizada"></iframe>
+          <a class="play" href="demo-amor.html" target="_blank" rel="noopener"><span>Abrir la demo →</span></a>
+        </div>
+        <p class="phone-cap"><b>Demo real.</b> Toca el teléfono, enciende la vela y espera a que empiece a escribir.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="plantillas">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Plantillas</span>
+        <h2>Seis estilos, la misma magia</h2>
+        <p>Todas se personalizan igual: nombre, fecha, recuerdos y firma. Mira la demo de cada una antes de elegir.</p>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Filtrar plantillas por ocasión"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="pedido">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Pedido</span>
+        <h2>Arma tu carta en un minuto</h2>
+        <p>No pagas nada aquí. Al enviar, se abre WhatsApp con tu pedido escrito; te confirmo, te paso los datos de pago y te mando el borrador.</p>
+      </div>
+      <div class="order-grid">
+        <form class="pedido" id="formPedido" novalidate>
+          <h2>Tu carta</h2>
+          <p class="intro">Con lo que pongas aquí ya puedo empezar. Si algo falta, lo vemos por WhatsApp.</p>
+
+          <div class="row">
+            <div class="field">
+              <label for="fPlantilla">Plantilla</label>
+              <select id="fPlantilla" name="plantilla"></select>
+            </div>
+            <div class="field">
+              <label for="fPaquete">Paquete</label>
+              <select id="fPaquete" name="paquete"></select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="fPara">Para quién es *</label>
+              <input id="fPara" name="para" placeholder="Ej. Ana" required>
+            </div>
+            <div class="field">
+              <label for="fDe">De parte de</label>
+              <input id="fDe" name="de" placeholder="Tu nombre (para la firma)">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="fOcasion">Ocasión *</label>
+              <input id="fOcasion" name="ocasion" placeholder="Cumpleaños, aniversario…" required>
+            </div>
+            <div class="field">
+              <label for="fFecha">Fecha de entrega</label>
+              <input id="fFecha" type="date" name="fecha">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="fTono">Tono</label>
+              <select id="fTono" name="tono">
+                <option>Tierna</option>
+                <option>Divertida</option>
+                <option>Emotiva</option>
+                <option>Elegante</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="fContacto">Tu WhatsApp o correo</label>
+              <input id="fContacto" name="contacto" placeholder="Para responderte">
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="fRecuerdos">Cuéntame 2 o 3 recuerdos</label>
+            <textarea id="fRecuerdos" name="recuerdos" placeholder="Ej. la primera cita en la cafetería, cómo se ríe, el viaje que siempre recuerdan…"></textarea>
+          </div>
+
+          <button class="btn-gold" type="submit">Enviar pedido por WhatsApp</button>
+          <p class="form-note">Se abre tu WhatsApp con el pedido escrito. Si no tienes WhatsApp en este dispositivo, usa “Copiar pedido”.</p>
+          <div class="estado" id="estado" role="status"></div>
+        </form>
+
+        <aside class="summary" aria-live="polite">
+          <span class="eyebrow">Tu pedido</span>
+          <div class="sum-prev" id="sumPrev"></div>
+          <dl>
+            <div><dt>Plantilla</dt><dd id="sumPlantilla">—</dd></div>
+            <div><dt>Paquete</dt><dd id="sumPaquete">—</dd></div>
+            <div><dt>Entrega</dt><dd id="sumEntrega">—</dd></div>
+            <div class="total"><dt>Total</dt><dd id="sumTotal">—</dd></div>
+          </dl>
+          <button class="btn-line" type="button" id="copiar">Copiar pedido</button>
+          <p class="sum-note">El total es de referencia. Si necesitas algo distinto, lo hablamos por WhatsApp antes de pagar.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="como">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>Tú cuentas la historia. Yo la escribo.</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><h4>Eliges y pides</h4><p>Escoges la plantilla, el paquete y me cuentas para quién es. Todo en el formulario.</p></div>
+        <div class="step"><h4>Te mando el borrador</h4><p>En el día tienes el texto para leerlo. Me dices qué cambiar y lo ajusto.</p></div>
+        <div class="step"><h4>Recibes el link</h4><p>Listo para enviar por WhatsApp, con archivo y video de respaldo.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="precios">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Precios</span>
+        <h2>Elige cuánto quieres que se note</h2>
+        <p>Precios de referencia en dólares. Si estás en otro país, te cotizo en tu moneda.</p>
+      </div>
+      <div class="plans">
+        <article class="plan">
+          <h3>Esencial</h3>
+          <p class="price"><small>US$</small>9</p>
+          <p class="for">Para salir del apuro y quedar bien.</p>
+          <ul>
+            <li>Carta con su nombre</li>
+            <li>Link listo para WhatsApp</li>
+            <li>1 ajuste de texto</li>
+            <li>Entrega en 48 h</li>
+          </ul>
+          <button class="btn-ghost" type="button" data-paquete="Esencial">Elegir Esencial</button>
+        </article>
+
+        <article class="plan star">
+          <span class="stamp">El más elegido</span>
+          <h3>Personalizada</h3>
+          <p class="price"><small>US$</small>19</p>
+          <p class="for">Para que se note que es de verdad para ella o él.</p>
+          <ul>
+            <li>Todo lo de Esencial</li>
+            <li>Tus anécdotas dentro del texto</li>
+            <li>Fecha, apodo y firma</li>
+            <li>Borrador antes de entregar</li>
+            <li>Entrega en 24 h</li>
+          </ul>
+          <button class="btn-gold" type="button" data-paquete="Personalizada">Elegir Personalizada</button>
+        </article>
+
+        <article class="plan">
+          <h3>Premium</h3>
+          <p class="price"><small>US$</small>35</p>
+          <p class="for">Para una fecha que no se puede repetir.</p>
+          <ul>
+            <li>Todo lo de Personalizada</li>
+            <li>Nota de voz o canción</li>
+            <li>Diseño y colores a medida</li>
+            <li>3 versiones para elegir</li>
+            <li>Entrega exprés en 12 h</li>
+          </ul>
+          <button class="btn-ghost" type="button" data-paquete="Premium">Elegir Premium</button>
+        </article>
+      </div>
+      <p class="pay-note">Pago por adelantado · Te muestro el borrador antes de entregar · Si algo no te gusta, lo ajusto sin costo.</p>
+    </div>
+  </section>
+
+  <section id="pago">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Pago y entrega</span>
+        <h2>Formas de pago</h2>
+        <p>Al confirmar el pedido te envío los datos exactos por WhatsApp. Se reserva la fecha con el 50 %; el resto, cuando apruebas el borrador.</p>
+      </div>
+      <div class="pago-grid">
+        <div class="pago"><span class="ico">Z</span><b>Zelle</b><span>Transferencia desde EE. UU. Te paso el correo y el titular al confirmar.</span></div>
+        <div class="pago"><span class="ico">₮</span><b>USDT</b><span>Cripto por Binance o red TRC20. Rápido y sin comisiones altas.</span></div>
+        <div class="pago"><span class="ico">T</span><b>Transfermóvil</b><span>Para pagos en Cuba, en CUP o MLC según el día.</span></div>
+        <div class="pago"><span class="ico">$</span><b>Efectivo</b><span>Si estás en La Habana, coordinamos entrega en mano.</span></div>
+      </div>
+      <p class="aviso-pago"><b>Entrega:</b> link para WhatsApp, archivo de respaldo y un video de 15 segundos con la carta ya personalizada. Si el link fallara, el recuerdo queda igual.</p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Antes de pedir</span>
+        <h2>Lo que todos preguntan</h2>
+      </div>
+      <div class="faq">
+        <details><summary>¿Cómo pago?</summary><p>Coordinamos por WhatsApp: Zelle, USDT, Transfermóvil o efectivo. Te envío los datos al confirmar el pedido. Con el 50 % reservo la fecha y empiezo; el resto lo pagas cuando apruebas el borrador.</p></details>
+        <details><summary>¿Cómo me la entregas?</summary><p>Te mando un link privado que se abre en cualquier celular, sin instalar nada. Además te doy el archivo HTML y un video de respaldo.</p></details>
+        <details><summary>¿Se ve bien en iPhone y en Android?</summary><p>Sí, está probada en ambos y se adapta a la pantalla. Solo necesita que la persona toque para encender la vela y activar el sonido.</p></details>
+        <details><summary>¿Puedo cambiar el texto de la plantilla?</summary><p>Para eso es. La plantilla define el estilo y el tono; el texto se escribe con sus nombres, su historia y su fecha. Puedes pedirme cambios hasta aprobar el borrador.</p></details>
+        <details><summary>¿Cuánto tarda?</summary><p>24 horas en Personalizada y 48 en Esencial. En temporadas altas conviene reservar con días de anticipación. Hay entrega exprés en 12 horas con el paquete Premium.</p></details>
+        <details><summary>¿Puedo agregar música o mi voz?</summary><p>Sí. El sonido de la pluma y la vela ya están incluidos; en Premium agrego una canción o una nota de voz tuya al final.</p></details>
+        <details><summary>¿Y si no le gusta?</summary><p>Antes de entregar ves el texto. Si algo no te convence, lo corrijo. Lo que se entrega es lo que tú aprobaste.</p></details>
+        <details><summary>¿Puedo enviarla por WhatsApp?</summary><p>Sí, es la forma más común. Mandas el link y la persona la abre con un toque, con vista previa y todo.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <div class="box">
+        <span class="eyebrow">Último paso</span>
+        <h2>¿Para quién es y qué te gustaría decirle?</h2>
+        <p>Elige una plantilla, escríbeme esa respuesta y en el día tienes el borrador. No necesitas tener las palabras: para eso estoy.</p>
+        <div class="cta">
+          <a class="btn-gold" href="#pedido">Armar mi pedido</a>
+          <a class="btn-ghost" href="https://wa.me/5351321718?text=Hola%2C%20quiero%20una%20carta%20personalizada.%20Es%20para%3A%20" target="_blank" rel="noopener">Escribirme directo</a>
+        </div>
+        <small>Respondo en el día · Cupos limitados por semana</small>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN
+   ============================================================ */
+const NEGOCIO = {
+  whatsapp: "5351321718",     // sin +, sin espacios
+  instagram: "",              // usuario sin @ (vacío = oculto)
+  tiktok: "",                 // usuario sin @ (vacío = oculto)
+  mensaje: "Hola, vi las plantillas y quiero una carta personalizada. Es para: "
+};
+
+const PLANTILLAS = [
+  {
+    id: "clasica", nombre: "Clásica", cat: "amor", tag: "Amor · San Valentín", archivo: "demo-amor.html",
+    desc: "Papel crema y cera marfil. La que sirve para cualquier declaración.",
+    saludo: "Para Daniela,", frase: "Hay noches en las que no puedo dormir y termino pensando en ti…",
+    p1: "#f1e2bf", p2: "#e5d0a2", ink: "#2b1a0d", tint: "150,100,40",
+    wax: ["#b99b6a", "#f0dcae", "#fff0c8", "#e3c88f", "#a98a5c"]
+  },
+  {
+    id: "confeti", nombre: "Confeti", cat: "cumple", tag: "Cumpleaños", archivo: "demo-cumple.html",
+    desc: "Papel rosado y cera coral. Para el día que todos tienen que recordar.",
+    saludo: "Feliz cumple, Sofi.", frase: "Hoy el día es tuyo, y pienso aprovecharlo…",
+    p1: "#f9e6df", p2: "#eecdc3", ink: "#3a1c18", tint: "140,60,50",
+    wax: ["#d98a7a", "#f6c3b5", "#ffe3da", "#e7a99a", "#c07a6a"]
+  },
+  {
+    id: "jardin", nombre: "Jardín", cat: "mama", tag: "Familia · Mamá", archivo: "demo-mama.html",
+    desc: "Verde suave y cera de jardín. Para decirle a mamá lo que no se dice.",
+    saludo: "Para ti, mamá,", frase: "Todo lo bueno que tengo lo aprendí de ti…",
+    p1: "#eef1da", p2: "#dbe0bc", ink: "#26301a", tint: "90,110,50",
+    wax: ["#8fa06a", "#d9e3b0", "#eef5cd", "#b9c78f", "#7d8f58"]
+  },
+  {
+    id: "nocturna", nombre: "Nocturna", cat: "papa", tag: "Familia · Papá", archivo: "demo-papa.html",
+    desc: "Gris azulado y cera azul. Para papá, sin cursilerías.",
+    saludo: "Para ti, papá,", frase: "La mayoría de las cosas que sé hacer bien las aprendí mirándote…",
+    p1: "#e8edf3", p2: "#ccd7e3", ink: "#1b2430", tint: "60,80,110",
+    wax: ["#6f87a6", "#b9cbe2", "#dbe8f7", "#93aac6", "#5f7794"]
+  },
+  {
+    id: "rosa", nombre: "Rosa", cat: "amistad", tag: "Amistad", archivo: "demo-amistad.html",
+    desc: "Rosa y cera de pétalo. Para la amistad que ya es familia.",
+    saludo: "Para Lau,", frase: "Nos hicimos amigos por casualidad y ahora no me imagino…",
+    p1: "#fbe6ee", p2: "#f1ccdb", ink: "#3a1626", tint: "150,70,100",
+    wax: ["#c2788f", "#f2b7ca", "#ffd9e4", "#d990a6", "#a96078"]
+  },
+  {
+    id: "dorada", nombre: "Dorada", cat: "aniversario", tag: "Aniversario", archivo: "demo-aniversario.html",
+    desc: "Champagne y cera dorada. Para aniversarios que se cuentan.",
+    saludo: "Cinco años, y sigo eligiéndote.", frase: "Hoy no te pido nada. Solo quiero seguir eligiéndote…",
+    p1: "#f7eed6", p2: "#e9d6aa", ink: "#33230c", tint: "150,110,40",
+    wax: ["#c2a25f", "#f0dca4", "#fff2c8", "#dcbf7e", "#a8874a"]
+  }
+];
+
+const PAQUETES = [
+  { id: "Esencial", precio: 9, entrega: "48 h" },
+  { id: "Personalizada", precio: 19, entrega: "24 h" },
+  { id: "Premium", precio: 35, entrega: "12 h" }
+];
+
+const FILTROS = [
+  { id: "todas", nombre: "Todas" },
+  { id: "amor", nombre: "Amor" },
+  { id: "cumple", nombre: "Cumpleaños" },
+  { id: "mama", nombre: "Mamá" },
+  { id: "papa", nombre: "Papá" },
+  { id: "amistad", nombre: "Amistad" },
+  { id: "aniversario", nombre: "Aniversario" }
+];
+
+/* ============================================================ */
+const $ = s => document.querySelector(s);
+const wa = texto => "https://wa.me/" + NEGOCIO.whatsapp + "?text=" + encodeURIComponent(texto);
+const plantillaPorId = id => PLANTILLAS.find(p => p.id === id) || PLANTILLAS[0];
+const paquetePorNombre = n => PAQUETES.find(p => p.id === n) || PAQUETES[1];
+
+function previewHTML(t, chico) {
+  const wax = "linear-gradient(90deg," + t.wax.join(",") + ")";
+  return '<div class="tprev' + (chico ? ' sum-prev' : '') + '" style="background:'
+    + 'radial-gradient(circle at 12% 8%,rgba(' + t.tint + ',.18),transparent 45%),'
+    + 'radial-gradient(circle at 90% 95%,rgba(' + t.tint + ',.25),transparent 50%),'
+    + 'linear-gradient(170deg,' + t.p1 + ',' + t.p2 + ');color:' + t.ink + '">'
+    + '<span class="ttag">' + t.tag + '</span>'
+    + '<p class="hand">' + t.saludo + '</p>'
+    + '<p class="hand tline">' + t.frase + '</p>'
+    + '<span class="tcandle" style="background:' + wax + '"></span>'
+    + '</div>';
+}
+
+/* ---------- filtros ---------- */
+const chips = $("#chips");
+FILTROS.forEach(f => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "chip" + (f.id === "todas" ? " on" : "");
+  b.textContent = f.nombre;
+  b.dataset.filtro = f.id;
+  b.setAttribute("aria-pressed", f.id === "todas" ? "true" : "false");
+  chips.appendChild(b);
+});
+chips.addEventListener("click", e => {
+  const b = e.target.closest(".chip");
+  if (!b) return;
+  chips.querySelectorAll(".chip").forEach(c => {
+    c.classList.toggle("on", c === b);
+    c.setAttribute("aria-pressed", c === b ? "true" : "false");
+  });
+  const f = b.dataset.filtro;
+  document.querySelectorAll(".tcard").forEach(card => {
+    card.hidden = f !== "todas" && card.dataset.cat !== f;
+  });
+});
+
+/* ---------- galería ---------- */
+const grid = $("#grid");
+PLANTILLAS.forEach(t => {
+  const card = document.createElement("article");
+  card.className = "tcard";
+  card.dataset.cat = t.cat;
+  card.innerHTML = previewHTML(t)
+    + '<div class="tbody">'
+    + '<h3>' + t.nombre + '</h3>'
+    + '<p>' + t.desc + '</p>'
+    + '<div class="tfoot"><span class="desde">desde US$9</span>'
+    + '<div class="tbtns">'
+    + '<a class="btn-line" href="' + t.archivo + '" target="_blank" rel="noopener">Ver demo</a>'
+    + '<button class="btn-gold btn-sm" type="button" data-elegir="' + t.id + '">Quiero esta</button>'
+    + '</div></div></div>';
+  grid.appendChild(card);
+});
+
+/* ---------- selects ---------- */
+const selPlantilla = $("#fPlantilla");
+const selPaquete = $("#fPaquete");
+PLANTILLAS.forEach(t => {
+  const o = document.createElement("option");
+  o.value = t.id;
+  o.textContent = t.nombre + " · " + t.tag;
+  selPlantilla.appendChild(o);
+});
+PAQUETES.forEach(p => {
+  const o = document.createElement("option");
+  o.value = p.id;
+  o.textContent = p.id + " — US$" + p.precio + " · " + p.entrega;
+  if (p.id === "Personalizada") o.selected = true;
+  selPaquete.appendChild(o);
+});
+
+/* ---------- resumen ---------- */
+function actualizarResumen() {
+  const t = plantillaPorId(selPlantilla.value);
+  const p = paquetePorNombre(selPaquete.value);
+  $("#sumPrev").outerHTML = previewHTML(t, true).replace('class="tprev sum-prev"', 'class="tprev sum-prev" id="sumPrev"');
+  $("#sumPlantilla").textContent = t.nombre;
+  $("#sumPaquete").textContent = p.id;
+  $("#sumEntrega").textContent = p.entrega;
+  $("#sumTotal").textContent = "US$" + p.precio;
+}
+selPlantilla.addEventListener("change", actualizarResumen);
+selPaquete.addEventListener("change", actualizarResumen);
+
+/* ---------- elegir desde la galería o los precios ---------- */
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-elegir]");
+  if (b) {
+    selPlantilla.value = b.dataset.elegir;
+    actualizarResumen();
+    document.getElementById("pedido").scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => $("#fPara").focus({ preventScroll: true }), 500);
+    return;
+  }
+  const p = e.target.closest("[data-paquete]");
+  if (p) {
+    selPaquete.value = p.dataset.paquete;
+    actualizarResumen();
+    document.getElementById("pedido").scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => $("#fPara").focus({ preventScroll: true }), 500);
+  }
+});
+
+/* ---------- armar el pedido ---------- */
+function armarMensaje() {
+  const t = plantillaPorId(selPlantilla.value);
+  const p = paquetePorNombre(selPaquete.value);
+  const v = id => document.getElementById(id).value.trim();
+  const fecha = v("fFecha") ? v("fFecha") : "a coordinar";
+  const lineas = [
+    "Hola, quiero una carta personalizada 🕯️",
+    "",
+    "Plantilla: " + t.nombre + " (" + t.tag + ")",
+    "Paquete: " + p.id + " — US$" + p.precio + " · entrega " + p.entrega,
+    "",
+    "Para: " + v("fPara"),
+    "De parte de: " + (v("fDe") || "—"),
+    "Ocasión: " + v("fOcasion"),
+    "Fecha de entrega: " + fecha,
+    "Tono: " + v("fTono")
+  ];
+  if (v("fRecuerdos")) lineas.push("", "Recuerdos:", v("fRecuerdos"));
+  if (v("fContacto")) lineas.push("", "Mi contacto: " + v("fContacto"));
+  return lineas.join("\n");
+}
+
+$("#formPedido").addEventListener("submit", e => {
+  e.preventDefault();
+  const form = e.currentTarget;
+  if (!form.checkValidity()) { form.reportValidity(); return; }
+  const url = wa(armarMensaje());
+  const estado = $("#estado");
+  estado.innerHTML = 'Se abrió WhatsApp con tu pedido. Si no pasó nada, <a href="' + url + '" target="_blank" rel="noopener">toca aquí para abrirlo</a>.';
+  estado.classList.add("on");
+  window.open(url, "_blank");
+});
+
+$("#copiar").addEventListener("click", async () => {
+  const btn = $("#copiar");
+  const texto = armarMensaje();
+  try {
+    await navigator.clipboard.writeText(texto);
+    btn.textContent = "Copiado ✓";
+  } catch (err) {
+    const ta = document.createElement("textarea");
+    ta.value = texto;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    btn.textContent = "Copiado ✓";
+  }
+  setTimeout(() => { btn.textContent = "Copiar pedido"; }, 2200);
+});
+
+/* ---------- contacto y redes ---------- */
+document.querySelectorAll("[data-wa]").forEach(a => {
+  a.href = wa(NEGOCIO.mensaje);
+  a.target = "_blank";
+  a.rel = "noopener";
+});
+const ig = document.querySelectorAll("[data-ig]");
+const tk = document.querySelectorAll("[data-tk]");
+if (NEGOCIO.instagram) ig.forEach(a => a.href = "https://instagram.com/" + NEGOCIO.instagram);
+else ig.forEach(a => a.style.display = "none");
+if (NEGOCIO.tiktok) tk.forEach(a => a.href = "https://tiktok.com/@" + NEGOCIO.tiktok);
+else tk.forEach(a => a.style.display = "none");
+
+/* ---------- inicial ---------- */
+actualizarResumen();
+</script>
+</body>
+</html>
