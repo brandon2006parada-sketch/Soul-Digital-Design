@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un día que es tuyo ✨</title>
+<style>
+:root{--ink:#fff8f2;--gold:#f8d98b;--pink:#f2a8bc;--night:#17182d;--night2:#29244a}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font-family:Arial, sans-serif;background:radial-gradient(ellipse at 20% 15%,#4a326e 0,transparent 42%),radial-gradient(ellipse at 80% 85%,#55334e 0,transparent 38%),linear-gradient(135deg,var(--night),var(--night2));overflow-x:hidden}
+.star{position:fixed;width:2px;height:2px;background:white;border-radius:50%;opacity:.5;animation:twinkle 3s infinite alternate;pointer-events:none}@keyframes twinkle{to{opacity:1;transform:scale(1.8)}}
+main{width:min(900px,92%);margin:0 auto;padding:46px 0 70px;text-align:center}.eyebrow{letter-spacing:4px;text-transform:uppercase;font-size:.75rem;color:var(--gold);margin-bottom:16px}.hero h1{font-family:Georgia, serif;font-size:clamp(2.6rem,8vw,5rem);line-height:1.05;margin:0}.hero h1 span{color:var(--gold)}.sub{color:#d8d2e8;max-width:600px;margin:18px auto 28px;line-height:1.7}
+.card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:26px;padding:26px;margin:25px auto;backdrop-filter:blur(12px);box-shadow:0 18px 60px rgba(0,0,0,.2)}
+#nameInput{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.24);color:white;padding:12px 15px;border-radius:12px;font:inherit;width:min(300px,100%);outline:none}#nameInput::placeholder{color:#d4cde0}.btn{border:0;border-radius:999px;padding:13px 22px;font:600 1rem Arial;cursor:pointer;color:#27203c;background:linear-gradient(120deg,var(--gold),var(--pink));box-shadow:0 6px 20px #0003;transition:.2s;margin:6px}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}.btn.secondary{color:white;background:rgba(255,255,255,.12);border:1px solid #ffffff30}
+#personalGreeting{font-family:Georgia, serif;font-size:2.2rem;color:var(--gold);margin:10px 0 5px}.cake{font-size:6rem;display:inline-block;cursor:pointer;filter:drop-shadow(0 12px 20px #0004);animation:float 3s ease-in-out infinite}@keyframes float{50%{transform:translateY(-8px)}}.small{font-size:.9rem;color:#d6d0e5}.hidden{display:none!important}
+.message{line-height:1.85;font-size:1.06rem;color:#f4eefa;max-width:650px;margin:18px auto}.wish{font-family:Georgia, serif;color:var(--gold);font-size:1.5rem}.gift{font-size:4.5rem;cursor:pointer;transition:transform .3s}.gift:hover{transform:rotate(-8deg) scale(1.1)}#giftMessage{line-height:1.8;color:#f7eafa;max-width:620px;margin:16px auto}
+.memory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}.memory{background:#ffffff0c;border:1px solid #ffffff20;border-radius:18px;padding:20px 12px}.memory b{display:block;color:var(--gold);font-family:Georgia, serif;font-size:1.2rem;margin-bottom:8px}.memory p{margin:0;font-size:.9rem;line-height:1.6;color:#e4deef}.footer{font-size:.8rem;color:#bcb4d1;margin-top:40px}.confetti{position:fixed;top:-20px;width:9px;height:14px;z-index:10;animation:fall linear forwards;pointer-events:none}@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+@media(max-width:600px){.memory-grid{grid-template-columns:1fr}.card{padding:20px}.hero h1{font-size:3rem}}
+
+.photo-section{margin:28px auto;max-width:760px}.photo-intro{color:#d8d2e8;line-height:1.7}.photo-drop{border:1px dashed #f8d98b66;border-radius:22px;padding:22px;background:rgba(255,255,255,.035);transition:.25s}.photo-drop.drag{background:rgba(248,217,139,.12);border-color:var(--gold)}.photo-picker{display:inline-block;cursor:pointer}.photo-picker input{display:none}.photo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:20px}.photo-tile{position:relative;min-height:220px;border-radius:18px;overflow:hidden;border:1px solid #ffffff20;background:linear-gradient(145deg,#ffffff0d,#00000020);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .3s,box-shadow .3s}.photo-tile:hover{transform:translateY(-4px);box-shadow:0 12px 28px #0004}.photo-tile img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover}.photo-tile .photo-placeholder{padding:18px;color:#ded7ec;position:relative;text-align:center;line-height:1.6}.photo-tile .photo-caption{position:absolute;bottom:0;left:0;right:0;padding:13px 10px;background:linear-gradient(transparent,rgba(10,10,25,.85));color:white;font-size:.9rem;text-align:center;pointer-events:none}.photo-tile .remove-photo{position:absolute;top:8px;right:8px;border:0;border-radius:50%;background:#17182dcc;color:white;width:30px;height:30px;cursor:pointer;z-index:2}.photo-reveal{margin-top:16px;color:var(--gold);font-family:Georgia, serif;font-size:1.15rem;min-height:1.5em}.photo-hint{font-size:.85rem;color:#bcb4d1;margin-top:12px}.photo-tile.empty{cursor:pointer}@media(max-width:600px){.photo-grid{grid-template-columns:1fr 1fr}.photo-tile{min-height:170px}}
+
+</style></head>
+<body><main>
+<section class="hero"><div class="eyebrow">Una pequeña sorpresa · Un gran día</div><h1>Hoy el mundo<br>celebra <span>tu existencia.</span></h1><p class="sub">No es una página cualquiera. Es una pausa para recordar que tu historia merece celebrarse, hoy y todos los días.</p>
+<div><input id="nameInput" placeholder="Escribe el nombre aquí..." maxlength="40"><button class="btn" onclick="setName()">Personalizar ✨</button></div></section>
+<div class="card"><div id="personalGreeting">¡Feliz cumpleaños!</div><p class="small">Un deseo, una vela y un instante solo para ti.</p><div class="cake" onclick="blowCandle()" title="Toca la vela">🎂</div><p id="candleText" class="small">Toca el pastel para apagar la vela y pedir un deseo.</p><button class="btn secondary" onclick="blowCandle()">Pedir mi deseo ✨</button></div>
+<div class="card"><div class="wish">Un mensaje para ti</div><p class="message">Que el nuevo capítulo que comienza esté lleno de momentos que te hagan reír sin darte cuenta, personas que te sumen, sueños que se acerquen y pequeñas cosas que se conviertan en grandes recuerdos. No tienes que tenerlo todo resuelto: basta con seguir descubriendo, creciendo y disfrutando el camino.</p><div style="font-size:2rem">🌙 ✦ 🌷 ✦ 🌙</div></div>
+<div class="card"><div class="wish">Abre tu regalo sorpresa</div><div class="gift" onclick="openGift()">🎁</div><p class="small">Toca el regalo. ¡No muerde!</p><div id="giftMessage" class="hidden">🎉 <b>Tu regalo es este recordatorio:</b> eres una persona con posibilidades por descubrir. Que nunca te falte una razón para ilusionarte, ni valor para ir detrás de aquello que te hace feliz. ¡Que venga un año extraordinario! 💫</div></div>
+<div class="card"><div class="wish">Tres deseos para tu nuevo año</div><div class="memory-grid"><div class="memory"><b>✨ Sorpresas</b><p>Que la vida te encuentre con cosas bonitas donde menos las esperes.</p></div><div class="memory"><b>🌱 Crecimiento</b><p>Que cada experiencia te ayude a descubrir todo lo que puedes llegar a ser.</p></div><div class="memory"><b>💛 Alegría</b><p>Que nunca falten motivos sencillos para sonreír y agradecer.</p></div></div></div>
+
+<!-- GALERÍA DE FOTOS: para personalizar, sustituye cada src por la ruta de una imagen local
+     (ej. src="fotos/recuerdo1.jpg") y entrega el HTML junto a esa carpeta; o incrusta cada imagen
+     en base64 para que el archivo HTML sea completamente autónomo. -->
+<div class="card photo-section" id="photoMemory">
+  <div class="wish">📸 Momentos que merecen quedarse</div>
+  <p class="photo-intro">Hay instantes que no deberían perderse en el tiempo. Aquí viven algunos de los recuerdos más bonitos.</p>
+  <div class="photo-grid" id="photoGrid">
+    <div class="photo-tile" data-memory="Que nunca olvides lo valioso que es compartir momentos bonitos."><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Recuerdo 1"><div class="photo-caption">Un recuerdo para siempre ✨</div></div>
+    <div class="photo-tile" data-memory="Los momentos sencillos también pueden convertirse en recuerdos extraordinarios."><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Recuerdo 2"><div class="photo-caption">Pequeños grandes momentos 💫</div></div>
+    <div class="photo-tile" data-memory="Ojalá el futuro te regale muchas historias que hoy todavía no imaginas."><img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Recuerdo 3"><div class="photo-caption">Una historia por contar 🌷</div></div>
+  </div>
+  <div class="photo-reveal" id="photoReveal" aria-live="polite">Toca una foto y descubre su mensaje ✨</div>
+</div>
+
+<button class="btn" onclick="celebrate()">¡Llenar el día de confeti! 🎊</button><div class="footer">Hecho con cariño, especialmente para celebrar tu día. ✦</div>
+</main><script>
+
+// Galería estática con mensajes interactivos. Las imágenes se insertan manualmente en el HTML.
+const photoGrid=document.getElementById('photoGrid'),photoReveal=document.getElementById('photoReveal');
+photoGrid.querySelectorAll('.photo-tile').forEach(tile=>tile.addEventListener('click',()=>{photoReveal.textContent='✨ '+(tile.dataset.memory||'Un recuerdo precioso, digno de guardarse.');celebrate(18)}));
+
+// Fondo de estrellas
+for(let i=0;i<95;i++){let s=document.createElement('i');s.className='star';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';s.style.animationDelay=Math.random()*3+'s';s.style.opacity=Math.random()*.7;document.body.appendChild(s)}
+function setName(){let n=document.getElementById('nameInput').value.trim();document.getElementById('personalGreeting').textContent=n?'¡Feliz cumpleaños, '+n+'!':'¡Feliz cumpleaños!';if(n)document.querySelector('.hero h1').innerHTML='Hoy el mundo<br>celebra <span>'+escapeHtml(n)+'</span>.';celebrate(30)}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+let candle=false;function blowCandle(){candle=!candle;document.querySelector('.cake').textContent=candle?'🍰':'🎂';document.getElementById('candleText').textContent=candle?'¡Deseo enviado al universo! Que algo bonito te sorprenda.':'Toca el pastel para apagar la vela y pedir un deseo.';if(candle)celebrate(50)}
+function openGift(){let el=document.getElementById('giftMessage');el.classList.toggle('hidden');document.querySelector('.gift').textContent=el.classList.contains('hidden')?'🎁':'🎊';if(!el.classList.contains('hidden'))celebrate(45)}
+function celebrate(count=70){let colors=['#f8d98b','#f2a8bc','#a8e6cf','#c9b8ff','#fff8f2'];for(let i=0;i<count;i++){let c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.animationDuration=(2.5+Math.random()*3)+'s';c.style.animationDelay=Math.random()*1+'s';c.style.transform='rotate('+Math.random()*360+'deg)';document.body.appendChild(c);setTimeout(()=>c.remove(),6500)}}
+</script></body></html>
